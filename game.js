@@ -271,18 +271,22 @@
     state = E.newState(name, setup.blood, setup.tempo, setup.household);
     state.recentEvents = [];
     save();
-    enterGame();
+    enterGame(true);
   }
 
-  function enterGame() {
+  function enterGame(isNew) {
     if (!Array.isArray(state.recentEvents)) state.recentEvents = [];
     show('game');
     buildStats();
     renderAll();
     Sound.startBgm();
-    const hh = E.HOUSEHOLDS[state.household] || E.HOUSEHOLDS.normal;
-    toast(state.name + ', 10살의 봄이 시작됐어요', 'good');
-    setTimeout(() => toast(hh.emoji + ' ' + hh.label + ' · 시작 자산 ' + fmt(state.money) + '만 원', 'good'), 700);
+    if (isNew) {
+      const hh = E.HOUSEHOLDS[state.household] || E.HOUSEHOLDS.normal;
+      toast(state.name + ', 10살의 봄이 시작됐어요', 'good');
+      setTimeout(() => toast(hh.emoji + ' ' + hh.label + ' · 시작 자산 ' + fmt(state.money) + '만 원', 'good'), 700);
+    } else {
+      toast(state.name + '의 기록을 이어서 엽니다', 'good');
+    }
   }
 
   /* ==========================================================
@@ -1110,7 +1114,7 @@
       }
       const slots = E.TEMPO[state.tempo] ? E.TEMPO[state.tempo].slotsPerTurn : 3;
       if (!Array.isArray(state.slots) || state.slots.length !== slots) state.slots = new Array(slots).fill(null);
-      enterGame();
+      enterGame(false);
     });
     $('#btn-collection').addEventListener('click', () => {
       Sound.sfx('click');
