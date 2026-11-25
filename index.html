@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f1e8">
+  <meta name="description" content="초3부터 스무 살까지, 21세기 한국에서 딸을 키우는 라이프 시뮬레이션">
+  <title>우리 딸, 스무 살 — 21세기 딸 키우기</title>
+  <link rel="icon" href="assets/daughter-child.jpg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+
+  <!-- ============ 타이틀 ============ -->
+  <section id="screen-title" class="screen is-active">
+    <div class="title-wrap">
+      <div class="title-card">
+        <img src="assets/daughter-child.jpg" alt="" class="title-art">
+        <div class="title-shade"></div>
+        <div class="title-copy">
+          <span class="kicker">21세기 딸 키우기 · 라이프 시뮬레이션</span>
+          <h1>우리 딸,<br><em>스무 살</em></h1>
+          <p>초3부터 성인이 될 때까지, 10년의 성장 기록</p>
+        </div>
+      </div>
+      <div class="title-menu">
+        <button class="btn btn-primary btn-lg" id="btn-new">새 게임 시작</button>
+        <div class="title-row">
+          <button class="btn btn-soft" id="btn-continue">이어하기</button>
+          <button class="btn btn-soft" id="btn-collection">엔딩 도감 <span class="pill" id="collection-count">0/14</span></button>
+        </div>
+      </div>
+      <p class="title-note">자동 저장 · 기록은 이 기기에만 남습니다 · 소리는 우측 상단에서 끌 수 있어요</p>
+    </div>
+  </section>
+
+  <!-- ============ 새 게임 설정 ============ -->
+  <section id="screen-setup" class="screen">
+    <header class="sub-head">
+      <button class="icon-btn" data-go="title" aria-label="뒤로">←</button>
+      <h2>새 게임</h2>
+      <span class="head-spacer"></span>
+    </header>
+    <div class="setup-card">
+      <label class="field-label" for="input-name">딸의 이름</label>
+      <div class="name-row">
+        <input id="input-name" maxlength="10" placeholder="이름을 입력하세요" autocomplete="off">
+        <button class="btn btn-soft btn-icon" id="btn-random-name" title="랜덤 이름">🎲</button>
+      </div>
+      <p class="field-hint">추천: <b id="suggest-name">서연</b> · 비우면 추천 이름으로 시작해요</p>
+
+      <label class="field-label">혈액형 <span class="field-hint-inline">보너스 능력치</span></label>
+      <div class="blood-grid" id="blood-grid"></div>
+      <p class="field-hint" id="blood-desc">섬세하고 계획적인 성격</p>
+
+      <label class="field-label">진행 템포</label>
+      <div class="tempo-list" id="tempo-list"></div>
+
+      <div class="setup-preview" id="setup-preview"></div>
+
+      <button class="btn btn-primary btn-lg" id="btn-start">10년의 육성을 시작합니다</button>
+      <p class="field-hint center">10세(초3) → 20세(성인) · 자동 저장됩니다</p>
+    </div>
+  </section>
+
+  <!-- ============ 게임 ============ -->
+  <section id="screen-game" class="screen">
+    <header class="topbar">
+      <div class="topbar-main">
+        <button class="icon-btn" id="btn-menu" aria-label="메뉴">☰</button>
+        <div class="hud-info">
+          <span class="hud-date" id="hud-date">2026년 봄</span>
+          <span class="hud-sub"><b id="hud-grade">초3</b> · <span id="hud-age">10살</span></span>
+        </div>
+        <div class="hud-money"><span id="hud-money">300</span><small>만 원</small></div>
+        <button class="icon-btn" id="btn-sound" aria-label="소리 켜기/끄기">🔊</button>
+      </div>
+      <div class="life-track" title="성인이 되기까지"><i id="life-fill"></i></div>
+    </header>
+
+    <div class="game-grid">
+      <aside class="panel portrait-card">
+        <div class="portrait">
+          <img id="portrait-img" src="assets/daughter-child.jpg" alt="딸의 모습">
+          <span class="portrait-age" id="portrait-age">10</span>
+        </div>
+        <div class="portrait-info">
+          <div class="daughter-name" id="daughter-name">서연</div>
+          <p class="mood" id="mood-text">마음이 편안해 보여요</p>
+          <div class="stress-box">
+            <div class="stress-top"><span>스트레스</span><b id="stress-val">8</b></div>
+            <div class="bar stress-bar"><i id="stress-fill"></i></div>
+            <p class="stress-note" id="stress-note"></p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="panel play-card">
+        <div class="stats" id="stats"></div>
+
+        <div class="schedule-head">
+          <h3>이번 <span id="period-label">분기</span> 일정</h3>
+          <span class="schedule-hint" id="slot-hint">3칸까지 선택</span>
+        </div>
+        <div class="slots" id="slots"></div>
+        <button class="btn btn-primary btn-run" id="btn-run">일정 실행</button>
+        <p class="run-note" id="run-note">빈 칸은 자유시간이 되어 스트레스가 조금 줄어요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 엔딩 ============ -->
+  <section id="screen-ending" class="screen">
+    <div class="ending-wrap">
+      <span class="kicker" id="ending-kicker">20세 · 성인이 되었습니다</span>
+      <div class="ending-card" id="ending-card">
+        <div class="ending-emoji" id="ending-emoji">🎓</div>
+        <h2 id="ending-title">행복한 사회인</h2>
+        <p class="ending-tag" id="ending-tag">평범하지만 단단한</p>
+        <p class="ending-desc" id="ending-desc"></p>
+      </div>
+      <div class="ending-stats" id="ending-stats"></div>
+      <p class="ending-note" id="ending-note"></p>
+      <div class="ending-actions">
+        <button class="btn btn-primary btn-lg" id="btn-ending-collection">엔딩 도감 보기</button>
+        <button class="btn btn-soft btn-lg" id="btn-ending-title">타이틀로</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 엔딩 도감 ============ -->
+  <section id="screen-collection" class="screen">
+    <header class="sub-head">
+      <button class="icon-btn" data-go="title" aria-label="뒤로">←</button>
+      <h2>엔딩 도감</h2>
+      <span class="pill" id="col-count">0/14</span>
+    </header>
+    <p class="col-desc">10년의 육성이 어떤 결말로 이어지는지 모아 보세요. 조건을 만족하면 자동으로 기록됩니다.</p>
+    <div class="col-grid" id="col-grid"></div>
+  </section>
+
+  <div id="overlay-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+  <script src="engine.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
