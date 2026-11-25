@@ -955,6 +955,9 @@ img { display: block; max-width: 100%; }
    잠금 화면
    ========================================================== */
 body.is-locked { overflow: hidden; }
+body.is-locked .screen,
+body.is-locked .toast-root,
+body.is-locked #overlay-root { display: none !important; }
 .lock-layer {
   position: fixed;
   inset: 0;

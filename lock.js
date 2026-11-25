@@ -24,8 +24,6 @@
     }
   } catch (e) { /* sessionStorage 차단 환경 */ }
 
-  document.body.classList.add('is-locked');
-
   var dots = Array.prototype.slice.call(document.querySelectorAll('#pin-dots i'));
   var msg = document.getElementById('lock-msg');
   var pad = document.getElementById('pin-pad');
