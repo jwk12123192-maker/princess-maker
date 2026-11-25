@@ -7,9 +7,35 @@
   <meta name="description" content="초3부터 스무 살까지, 21세기 한국에서 딸을 키우는 라이프 시뮬레이션">
   <title>우리 딸, 스무 살 — 21세기 딸 키우기</title>
   <link rel="icon" href="assets/daughter-child.jpg">
-  <link rel="stylesheet" href="styles.css?v=20261125b">
+  <link rel="stylesheet" href="styles.css?v=20261125c">
 </head>
 <body>
+  <!-- ============ 잠금 화면 ============ -->
+  <div id="lock-layer" class="lock-layer" role="dialog" aria-label="잠금 화면">
+    <div class="lock-card">
+      <div class="lock-emblem">🔐</div>
+      <h1 class="lock-title">우리 딸, 스무 살</h1>
+      <p class="lock-sub">4자리 비밀번호를 입력해 주세요</p>
+      <div class="pin-dots" id="pin-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="pin-pad" id="pin-pad">
+        <button type="button" data-key="1">1</button>
+        <button type="button" data-key="2">2</button>
+        <button type="button" data-key="3">3</button>
+        <button type="button" data-key="4">4</button>
+        <button type="button" data-key="5">5</button>
+        <button type="button" data-key="6">6</button>
+        <button type="button" data-key="7">7</button>
+        <button type="button" data-key="8">8</button>
+        <button type="button" data-key="9">9</button>
+        <button type="button" class="pin-empty" disabled aria-hidden="true"></button>
+        <button type="button" data-key="0">0</button>
+        <button type="button" data-key="del" aria-label="지우기">⌫</button>
+      </div>
+      <p class="lock-msg" id="lock-msg"></p>
+      <p class="lock-foot">엄마·아빠만 볼 수 있는 기록이에요</p>
+    </div>
+  </div>
+
   <div class="bg-layer" aria-hidden="true"></div>
 
   <!-- ============ 타이틀 ============ -->
@@ -159,7 +185,8 @@
   <div id="overlay-root"></div>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
 
-  <script src="engine.js?v=20261125b"></script>
-  <script src="game.js?v=20261125b"></script>
+  <script src="lock.js?v=20261125c"></script>
+  <script src="engine.js?v=20261125c"></script>
+  <script src="game.js?v=20261125c"></script>
 </body>
 </html>
