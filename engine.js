@@ -45,6 +45,25 @@
     },
   };
 
+  /* ---------------- 집안 형편 ---------------- */
+  const HOUSEHOLDS = {
+    rich: {
+      key: 'rich', label: '여유로운 집안', emoji: '💎',
+      money: 2000, allowance: { quarter: 250, month: 84 }, bonus: {},
+      desc: '부자 아빠 · 초기 자금 2,000만 원, 분기 생활비 250만 원',
+    },
+    normal: {
+      key: 'normal', label: '평범한 직장인 집안', emoji: '🏠',
+      money: 300, allowance: { quarter: 80, month: 27 }, bonus: {},
+      desc: '초기 자금 300만 원, 분기 생활비 80만 원',
+    },
+    poor: {
+      key: 'poor', label: '빠듯한 집안', emoji: '🏚️',
+      money: 50, allowance: { quarter: 20, month: 7 }, bonus: { mental: 8, stamina: 4 },
+      desc: '초기 자금 50만 원, 분기 생활비 20만 원 · 대신 멘탈 보너스',
+    },
+  };
+
   const SEASONS = [
     { name: '봄',   months: '3월 – 5월',   emoji: '🌸' },
     { name: '여름', months: '6월 – 8월',   emoji: '☀️' },
@@ -165,6 +184,60 @@
       },
     },
 
+    /* ---- 무료 활동 ---- */
+    {
+      id: 'freeLib', cat: 'free', name: '동네 도서관 독학', icon: '📚', cost: 0, stress: 3, focus: 'academic',
+      gains: { academic: 2, mental: 1 },
+      desc: '돈이 없어도 책은 읽을 수 있어요.',
+      flavor: {
+        success: '도서관 구석자리에서 문제집을 반쯤 풀었어요.',
+        great: '사서 선생님이 추천한 책이 재미있었는지 두 시간이 훅 갔어요.',
+        fail: '집중이 안 돼서 같은 페이지를 계속 보고 있었어요.',
+      },
+    },
+    {
+      id: 'freeRun', cat: 'free', name: '공원 달리기', icon: '🏃', cost: 0, stress: -4, focus: 'stamina',
+      gains: { stamina: 3 },
+      desc: '맨발로 뛰어도 즐거워요.',
+      flavor: {
+        success: '공원 한 바퀴를 돌고 왔어요. 숨은 차지만 기분은 좋아요.',
+        great: '오늘은 두 바퀴! 딸이 "나 달리기 재능 있는 듯"이라며 웃었어요.',
+        fail: '돌다가 쉬었어요. 그래도 밖에 나간 것만으로 충분해요.',
+      },
+    },
+    {
+      id: 'freeChore', cat: 'free', name: '집안일 돕기', icon: '🧹', cost: 0, stress: 2, focus: 'mental',
+      gains: { mental: 2 }, bondBonus: 2,
+      desc: '같이 살림을 하면 마음도 가까워져요.',
+      flavor: {
+        success: '설거지를 같이 했어요. 물을 튀기며 웃었습니다.',
+        great: '딸이 먼저 "오늘은 내가 할게"라고 했어요. 마음이 뭉클했습니다.',
+        fail: '하다가 하나를 깼어요. "괜찮아"라고 했지만 조금 속상했나 봐요.',
+      },
+    },
+
+    /* ---- 프리미엄 수업 ---- */
+    {
+      id: 'premiumTutor', cat: 'class', name: '1:1 프리미엄 과외', icon: '💎', cost: 150, stress: 6, focus: 'academic',
+      gains: { academic: 8, mental: 1 },
+      desc: '유명 강사와 1대1. 비싸지만 확실해요.',
+      flavor: {
+        success: '선생님이 딸의 약점을 정확히 짚어줬어요. 숙제도 딱 맞게 나왔습니다.',
+        great: '한 번에 막힌 단원을 뚫었어요. "이제 이해돼!" 딸이 소리쳤습니다.',
+        fail: '수업료는 나갔는데 딸이 피곤해서 집중을 못 했어요.',
+      },
+    },
+    {
+      id: 'globalCamp', cat: 'class', name: '해외 글로벌 캠프', icon: '✈️', cost: 350, stress: 2, focus: 'charm',
+      gains: { academic: 4, charm: 6, mental: 2 },
+      desc: '여름방학 해외 캠프에서 세상을 배워요.',
+      flavor: {
+        success: '외국 친구들과 어울리며 자신감이 붙었어요. 사진 속 얼굴이 밝습니다.',
+        great: '캠프 우수 참가자로 뽑혀 발표까지 했어요!',
+        fail: '낯선 환경에 적응하느라 힘들어했지만, 끝까지 해냈어요.',
+      },
+    },
+
     /* ---- 휴식 · 여가 ---- */
     {
       id: 'home', cat: 'rest', name: '집콕 휴식', icon: '🛋️', cost: 0, stress: -22, focus: null,
@@ -202,9 +275,46 @@
   ACTIVITIES.forEach((a) => { ACT_BY_ID[a.id] = a; });
   const CAT_META = {
     class: { label: '학원 · 수업', icon: '🏫' },
+    free:  { label: '무료 활동', icon: '🆓' },
     work:  { label: '알바 · 활동', icon: '💼' },
     rest:  { label: '휴식 · 여가', icon: '🌿' },
   };
+
+  /* ---------------- 성향 · 취향 ---------------- */
+  const PERSONALITIES = {
+    curious:  { key: 'curious',  label: '탐구형', emoji: '🔍', desc: '궁금한 건 끝까지 파고들어요.',
+      likes: ['exam', 'coding', 'intern', 'tutor', 'freeLib'], dislikes: ['home', 'friends'] },
+    artistic: { key: 'artistic', label: '예술형', emoji: '🎨', desc: '감정과 표현이 풍부해요.',
+      likes: ['art', 'creator', 'friends'], dislikes: ['exam', 'tutor', 'intern'] },
+    social:   { key: 'social',   label: '사교형', emoji: '💬', desc: '사람들 사이에서 에너지를 얻어요.',
+      likes: ['speech', 'friends', 'parttime', 'creator'], dislikes: ['home', 'coding'] },
+    active:   { key: 'active',   label: '활동형', emoji: '🏃', desc: '몸을 움직일 때 살아나요.',
+      likes: ['sports', 'parttime', 'friends', 'freeRun'], dislikes: ['home', 'exam'] },
+    rebel:    { key: 'rebel',    label: '반항기', emoji: '😤', desc: '시키는 대로 하는 건 싫어요.',
+      likes: ['friends', 'creator', 'home'], dislikes: ['exam', 'coding', 'speech', 'volunteer', 'tutor', 'freeChore'] },
+    warm:     { key: 'warm',     label: '다정형', emoji: '🌷', desc: '사람 마음을 잘 헤아려요.',
+      likes: ['volunteer', 'friends', 'speech', 'freeChore'], dislikes: ['intern', 'parttime'] },
+  };
+  const PERSONALITY_KEYS = Object.keys(PERSONALITIES);
+
+  function buildPrefs(key, rng) {
+    const R = rng || Math.random;
+    const p = PERSONALITIES[key] || PERSONALITIES.curious;
+    const prefs = {};
+    ACTIVITIES.forEach((a) => {
+      if (p.likes.indexOf(a.id) >= 0) prefs[a.id] = 'like';
+      else if (p.dislikes.indexOf(a.id) >= 0) prefs[a.id] = 'dislike';
+      else prefs[a.id] = 'neutral';
+    });
+    const neutrals = ACTIVITIES.filter((a) => prefs[a.id] === 'neutral');
+    if (neutrals.length) prefs[neutrals[Math.floor(R() * neutrals.length)].id] = 'like';
+    return prefs;
+  }
+
+  function pickOne(arr, rng) {
+    const R = rng || Math.random;
+    return arr[Math.floor(R() * arr.length)];
+  }
 
   /* ---------------- 21세기 이슈 이벤트 ---------------- */
   const EVENTS = [
@@ -251,8 +361,8 @@
         { label: '고위험 테마주에 도전', hint: '대박 아니면 손실', apply(s) {
           const win = Math.random() < 0.35;
           if (win) { const g = Math.round(s.money * 0.7); s.money += g; s.stats.mental += 2; s.flags.riskInvest = true; return `테마주가 급등했어요! +${g}만 원. 딸은 "내가 봤다니까"라며 좋아합니다.`; }
-          const l = Math.round(s.money * 0.45); s.money = Math.max(0, s.money - l); s.stress = clamp(s.stress + 10, 0, 100); s.flags.riskInvest = true;
-          return `차트가 무너졌어요. -${l}만 원. 딸은 한동안 앱을 열지 않았습니다.`;
+          const l = Math.round(s.money * 0.45); s.money = Math.max(0, s.money - l); s.stress = clamp(s.stress + 10, 0, 100); s.flags.riskInvest = true; s.flags.riskLoss = true; s.debt = (s.debt || 0) + 90;
+          return `차트가 무너졌어요. -${l}만 원. 게다가 친구에게 빌린 90만 원까지 갚아야 합니다. 딸은 한동안 앱을 열지 않았습니다.`;
         } },
         { label: '학원비에 올인', hint: '학업 ↑ · 자산 ↓',
           apply(s) { s.money = Math.max(0, s.money - 80); s.stats.academic += 6; s.stress = clamp(s.stress + 6, 0, 100); return '딸은 "차라리 공부에 쓰는 게 낫다"며 특강을 신청했어요.'; } },
@@ -381,6 +491,173 @@
     },
   ];
 
+  /* ---------------- 이중생활 발각 이벤트 (조건부) ----------------
+     유대감·스트레스·도덕성이 엇나가 일탈도가 쌓였을 때만 찾아옵니다. */
+  const DISCOVERY_EVENTS = [
+    {
+      id: 'disc_absence', discovery: true, weight: 12,
+      kicker: '수상한 낌새 · 학원 문자', title: '학원에서 결석 문자가 왔어요',
+      desc: '"오늘 수업에 참석하지 않았습니다." 문자를 보고 물었더니, 딸은 "조퇴했어"라고만 합니다. 가방에서는 PC방 영수증이 떨어졌습니다.',
+      when: (s) => (s.deviance || 0) >= 25,
+      choices: [
+        { label: '단호하게 사실을 확인한다', hint: '유대감 ↓ · 일탈도 ↓↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 12, 0, 100); s.bond = clamp(s.bond - 6, 0, 100); s.stress = clamp(s.stress + 6, 0, 100); s.stats.mental += 2; return '딸은 결국 학원에 가지 않았다고 인정했어요. "죄송해요"라는 말을 남기고 방에 들어갔습니다.'; } },
+        { label: '왜 그랬는지 들어준다', hint: '유대감 ↑ · 일탈도 ↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 7, 0, 100); s.bond = clamp(s.bond + 8, 0, 100); s.stress = clamp(s.stress - 6, 0, 100); s.stats.mental += 3; return '"숨이 막혔어." 딸이 처음으로 솔직하게 말했어요. 안아주자 어깨가 풀렸습니다.'; } },
+        { label: '모른 척 넘어간다', hint: '유대감 ↓ · 일탈도 ↑',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance + 8, 0, 100); s.bond = clamp(s.bond - 4, 0, 100); return '딸은 안도한 듯했지만, 다음 주에도 같은 문자가 왔습니다.'; } },
+      ],
+    },
+    {
+      id: 'disc_witness', discovery: true, weight: 10,
+      kicker: '수상한 낌새 · 지인의 제보', title: '"어제 PC방에서 딸을 봤어요"',
+      desc: '이웃집 엄마에게서 연락이 왔어요. "학원 시간에 애들이랑 PC방에 있던데…" 딸은 그 시간에 학원에 있었다고 했습니다.',
+      when: (s) => (s.deviance || 0) >= 25,
+      choices: [
+        { label: '증거를 들고 조용히 이야기한다', hint: '유대감 ↓ · 일탈도 ↓↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 11, 0, 100); s.bond = clamp(s.bond - 5, 0, 100); s.stress = clamp(s.stress + 4, 0, 100); return '딸의 얼굴이 굳었어요. 변명을 하다가 결국 고개를 숙였습니다.'; } },
+        { label: '친구 문제부터 물어본다', hint: '유대감 ↑ · 일탈도 ↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 6, 0, 100); s.bond = clamp(s.bond + 7, 0, 100); s.stats.mental += 2; return '"그 애들이랑 있으면 편해. 집에서는 자꾸 뭐라 하잖아." 딸의 말에 할 말을 잃었습니다.'; } },
+      ],
+    },
+    {
+      id: 'disc_card', discovery: true, weight: 9,
+      kicker: '수상한 낌새 · 카드 내역', title: '카드 내역에 모르는 결제가 찍혔어요',
+      desc: '용돈을 준 적 없는 시간에 편의점, 코인노래방, PC방 결제가 줄줄이 찍혀 있어요. 딸은 "친구가 샀어"라고 합니다.',
+      when: (s) => (s.deviance || 0) >= 25 && s.age >= 12,
+      choices: [
+        { label: '용돈과 지출을 함께 정리한다', hint: '유대감 ↑ · 일탈도 ↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 8, 0, 100); s.bond = clamp(s.bond + 6, 0, 100); s.money = Math.max(0, s.money - 20); return '가계부를 같이 쓰기로 했어요. 딸이 "다음엔 말하고 쓸게"라고 했습니다.'; } },
+        { label: '크게 혼낸다', hint: '유대감 ↓ · 일탈도 ↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 10, 0, 100); s.bond = clamp(s.bond - 7, 0, 100); s.stress = clamp(s.stress + 8, 0, 100); return '딸은 울면서 방에 들어갔어요. 다음 날부터 말수가 확 줄었습니다.'; } },
+        { label: '그냥 넘긴다', hint: '일탈도 ↑',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance + 9, 0, 100); s.bond = clamp(s.bond - 2, 0, 100); return '딸은 웃으며 "고마워"라고 했지만, 카드 내역은 계속 늘었습니다.'; } },
+      ],
+    },
+    {
+      id: 'disc_street', discovery: true, weight: 8,
+      kicker: '수상한 낌새 · 우연한 목격', title: '길에서 딸을 마주쳤어요',
+      desc: '퇴근길, 골목에서 딸을 봤어요. 교복 위에 후드티를 걸치고, 담배 연기가 나는 무리 속에 있었습니다. 딸은 "잠깐 지나가는 길"이라고 합니다.',
+      when: (s) => (s.deviance || 0) >= 35 && s.age >= 14,
+      choices: [
+        { label: '그 자리에서 데리고 집으로 온다', hint: '유대감 ↓ · 일탈도 ↓↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 14, 0, 100); s.bond = clamp(s.bond - 8, 0, 100); s.stress = clamp(s.stress + 10, 0, 100); s.stats.mental += 2; return '집으로 오는 내내 딸은 아무 말도 하지 않았어요. 현관에서 "미안해요"라고 했습니다.'; } },
+        { label: '다음 날 조용히 물어본다', hint: '유대감 ↑ · 일탈도 ↓',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 8, 0, 100); s.bond = clamp(s.bond + 6, 0, 100); s.stats.mental += 3; return '"그냥… 집에 있기 싫었어." 딸이 처음으로 약한 모습을 보였습니다.'; } },
+        { label: '모른 척 지나친다', hint: '일탈도 ↑↑',
+          apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance + 12, 0, 100); s.bond = clamp(s.bond - 5, 0, 100); return '딸은 우리를 보지 못한 척했습니다. 다음 날, 딸의 방에서 낯선 향 냄새가 났어요.'; } },
+      ],
+    },
+  ];
+  EVENTS.push({
+    id: 'overspend', weight: 5,
+    kicker: '21세기 소비 · 영끌', title: '친구들은 다 가진 게 있대요',
+    desc: '한정판 운동화와 최신 스마트폰 이야기가 식탁에서 나옵니다. 딸은 "할부로 하면 한 달에 얼마 안 해"라고 말해요.',
+    when: (s) => s.age >= 13,
+    choices: [
+      { label: '할부로 사준다', hint: '매력 ↑ · 자산 ↓ · 빚 ↑',
+        apply(s) { const price = 120; const pay = Math.min(s.money, price); s.money -= pay; s.debt = (s.debt || 0) + (price - pay); s.stats.charm += 6; s.stress = clamp(s.stress + 4, 0, 100); s.flags.overspent = true; return '딸은 좋아했지만, 다음 달 할부 문자가 날아왔습니다. ' + (price - pay) + '만 원이 빚으로 남았어요.'; } },
+      { label: '필요한 것만 사 준다', hint: '멘탈 ↑',
+        apply(s) { s.stats.mental += 4; s.money = Math.max(0, s.money - 20); return '딸은 조금 아쉬워했지만, "지금은 이걸로 충분해"라고 했습니다.'; } },
+      { label: '스스로 모아서 사게 한다', hint: '멘탈 ↑ · 학업 ↑',
+        apply(s) { s.stats.mental += 3; s.stats.academic += 2; s.bond = clamp(s.bond + 3, 0, 100); return '딸은 알바를 시작했어요. 석 달 뒤, 직접 산 운동화를 신고 나갔습니다.'; } },
+    ],
+  });
+
+  /* ---------------- 집안 형편 · 가족 이벤트 ---------------- */
+  EVENTS.push(
+    {
+      id: 'hh_startup', weight: 5, kicker: '가족 경제 · 도전', title: '아빠가 창업을 고민하고 있어요',
+      desc: '퇴사하고 작은 가게를 열고 싶다는 말을 꺼냈어요. 딸은 식탁에서 조용히 듣고 있습니다.',
+      when: (s) => s.age >= 12,
+      choices: [
+        { label: '딸과 상의하고 도전한다', hint: '대박 또는 위기 · 유대감 ↑',
+          apply(s) {
+            if (Math.random() < 0.45) {
+              s.money += 700; s.bond = clamp(s.bond + 8, 0, 100); s.stress = clamp(s.stress - 4, 0, 100); s.stats.mental += 2; s.flags.familyBiz = true;
+              return '가게가 자리를 잡았어요! 첫 달 매출이 생각보다 좋습니다. 딸이 "우리 아빠 멋있다"고 했어요.';
+            }
+            const loss = Math.min(s.money, 150);
+            s.money -= loss; s.bond = clamp(s.bond + 3, 0, 100); s.stress = clamp(s.stress + 10, 0, 100); s.stats.mental += 1;
+            return '생각보다 손님이 없었어요. ' + loss + '만 원이 사라졌지만, 딸은 "그래도 도전한 거잖아"라고 했습니다.';
+          } },
+        { label: '지금은 안정이 먼저', hint: '자산 소폭 ↑ · 멘탈 ↑',
+          apply(s) { s.money += 40; s.stats.mental += 2; s.bond = clamp(s.bond - 1, 0, 100); return '월급은 소중하니까요. 딸은 "그럴 수 있지"라고 담담하게 말했어요.'; } },
+        { label: '작게 시작해 본다', hint: '자산 ↑ · 유대감 ↑ · 스트레스 ↑',
+          apply(s) { s.money += 120; s.stress = clamp(s.stress + 4, 0, 100); s.bond = clamp(s.bond + 4, 0, 100); return '주말에만 여는 작은 가게를 시작했어요. 딸도 가끔 계산대에 서 봅니다.'; } },
+      ],
+    },
+    {
+      id: 'hh_crisis', weight: 6, kicker: '가족 경제 · 위기', title: '갑작스러운 병원비가 생겼어요',
+      desc: '할머니가 다치셔서 병원비가 필요합니다. 통장 잔고를 보며 한숨이 나옵니다.',
+      when: (s) => s.age >= 11,
+      choices: [
+        { label: '딸에게 솔직히 말한다', hint: '유대감 ↑↑ · 자산 ↓',
+          apply(s) { const cost = Math.min(s.money, 80); s.money -= cost; s.bond = clamp(s.bond + 10, 0, 100); s.stats.mental += 3; s.stress = clamp(s.stress + 4, 0, 100); return '"우리 조금 아껴 쓰자." 딸이 먼저 말했어요. ' + cost + '만 원이 나갔지만 마음은 가까워졌습니다.'; } },
+        { label: '숨기고 혼자 해결한다', hint: '스트레스 ↑ · 유대감 ↓',
+          apply(s) { const cost = Math.min(s.money, 120); s.money -= cost; s.stress = clamp(s.stress + 14, 0, 100); s.bond = clamp(s.bond - 4, 0, 100); s.deviance = clamp((s.deviance || 0) + 2, 0, 100); return '딸은 뭔가 이상하다는 걸 눈치챘지만 아무것도 묻지 않았어요. 밤마다 계산기를 두드렸습니다.'; } },
+        { label: '가족회의를 연다', hint: '유대감 ↑ · 자산 ↓',
+          apply(s) { const cost = Math.min(s.money, 90); s.money -= cost; s.bond = clamp(s.bond + 6, 0, 100); s.stats.mental += 2; return '셋이 머리를 맞대고 지출을 정리했어요. 딸이 "나도 아껴 쓸게"라고 했습니다.'; } },
+      ],
+    },
+    {
+      id: 'hh_scam', weight: 4, kicker: '가족 경제 · 사기', title: '"고수익 보장" 투자 리딩방 초대',
+      desc: '아빠 휴대폰에 낯선 사람이 "3개월 안에 두 배"라며 투자방 링크를 보냈어요. 딸도 옆에서 화면을 보고 있습니다.',
+      when: (s) => s.age >= 13,
+      choices: [
+        { label: '참여해 본다', hint: '대박 또는 사기 피해',
+          apply(s) {
+            if (Math.random() < 0.3) { s.money += 400; s.stats.mental += 1; return '운 좋게 수익이 났어요. 하지만 이런 일이 다시 오지 않기를 바랍니다.'; }
+            const loss = Math.min(s.money, 300); s.money -= loss; s.stress = clamp(s.stress + 12, 0, 100); s.flags.scammed = true;
+            return '링크가 사라지고 연락도 끊겼어요. ' + loss + '만 원을 잃었습니다. 딸이 "역시 사기였네"라고 했어요.';
+          } },
+        { label: '딸과 함께 사기 수법을 알아본다', hint: '코딩 ↑ · 유대감 ↑',
+          apply(s) { s.stats.coding += 3; s.bond = clamp(s.bond + 4, 0, 100); s.stats.mental += 2; return '둘이서 보이스피싱 사례를 찾아봤어요. 딸이 "이건 진짜 위험하다"며 링크를 지웠습니다.'; } },
+        { label: '무시하고 차단한다', hint: '멘탈 ↑',
+          apply(s) { s.stats.mental += 2; return '수상한 링크는 차단하는 게 최고예요. 오늘도 무사히 넘어갔습니다.'; } },
+      ],
+    },
+    {
+      id: 'hh_appliance', weight: 5, kicker: '가족 경제 · 지출', title: '세탁기가 고장 났어요',
+      desc: '빨래가 쌓여 있는데 세탁기가 멈췄어요. 수리비 견적은 60만 원입니다.',
+      when: (s) => s.age >= 10,
+      choices: [
+        { label: '바로 고친다', hint: '자산 ↓ · 멘탈 ↑',
+          apply(s) { const cost = Math.min(s.money, 60); s.money -= cost; s.stats.mental += 1; return '수리 기사님이 와서 30분 만에 고쳐주셨어요. ' + cost + '만 원이 들었지만 집이 다시 평화로워졌습니다.'; } },
+        { label: '일단 미룬다', hint: '스트레스 ↑ · 유대감 ↓',
+          apply(s) { s.stress = clamp(s.stress + 6, 0, 100); s.bond = clamp(s.bond - 2, 0, 100); return '한 주 동안 손빨래를 했어요. 딸은 "왜 아직도 안 고쳐?"라고 했습니다.'; } },
+        { label: '딸과 함께 고쳐본다', hint: '코딩 ↑ · 유대감 ↑',
+          apply(s) { s.stats.coding += 2; s.bond = clamp(s.bond + 4, 0, 100); s.stress = clamp(s.stress + 2, 0, 100); return '유튜브를 보며 부품을 분해했어요. 결국 고쳤고, 딸이 "우리 팀워크 대박"이라며 웃었습니다.'; } },
+      ],
+    },
+    {
+      id: 'hh_help', weight: 6, kicker: '가족 경제 · 살림', title: '딸이 살림을 보태겠대요',
+      desc: '딸이 알바로 모은 돈을 내밀며 "학원비에 보태 써"라고 합니다. 통장 잔고가 빠듯한 걸 알고 있었어요.',
+      when: (s) => s.money < 220 && s.age >= 14,
+      choices: [
+        { label: '고맙게 받는다', hint: '자산 ↑ · 유대감 ↑↑',
+          apply(s) { s.money += 100; s.bond = clamp(s.bond + 8, 0, 100); s.stats.mental += 3; s.stress = clamp(s.stress - 2, 0, 100); return '딸의 손에서 100만 원을 받았어요. "우리 같이 버티자." 코끝이 찡했습니다.'; } },
+        { label: '네 몫은 네가 써', hint: '유대감 ↑ · 멘탈 ↑',
+          apply(s) { s.bond = clamp(s.bond + 4, 0, 100); s.stats.mental += 2; return '딸은 조금 서운했지만, "내 돈은 내가 쓸게"라며 웃었습니다.'; } },
+      ],
+    },
+    {
+      id: 'hh_housing', weight: 4, kicker: '가족 경제 · 주거', title: '월세가 올랐어요',
+      desc: '집주인이 월세를 올리겠다고 합니다. 이사할지, 버틸지 고민됩니다.',
+      when: (s) => s.age >= 13,
+      choices: [
+        { label: '이사한다', hint: '자산 ↓ · 스트레스 ↑',
+          apply(s) { const cost = Math.min(s.money, 100); s.money -= cost; s.stress = clamp(s.stress + 6, 0, 100); s.bond = clamp(s.bond + 2, 0, 100); return '짐을 싸는 데 한 달이 걸렸어요. 새 집은 조금 작지만 햇빛이 좋습니다.'; } },
+        { label: '버틴다', hint: '자산 ↓ · 스트레스 ↑',
+          apply(s) { const cost = Math.min(s.money, 50); s.money -= cost; s.stress = clamp(s.stress + 8, 0, 100); return '월세를 올려 드리고 버티기로 했어요. 지출이 늘었습니다.'; } },
+        { label: '딸과 함께 지출을 줄인다', hint: '유대감 ↑ · 자산 ↓',
+          apply(s) { const cost = Math.min(s.money, 30); s.money -= cost; s.bond = clamp(s.bond + 6, 0, 100); s.stats.mental += 2; return '가계부를 같이 쓰며 구독을 정리했어요. 딸이 "이거 안 쓰면 아껴"라고 알려줬습니다.'; } },
+      ],
+    }
+  );
+
+  DISCOVERY_EVENTS.forEach((e) => { EVENTS.push(e); });
+
   const EVENT_BY_ID = {};
   EVENTS.forEach((e) => { EVENT_BY_ID[e.id] = e; });
 
@@ -433,8 +710,12 @@
   }
 
   /* ---------------- 상태 ---------------- */
-  function newState(name, blood, tempoKey) {
+  function newState(name, blood, tempoKey, householdKey) {
     const tKey = TEMPO[tempoKey] ? tempoKey : 'quarter';
+    const hKey = householdKey === 'random'
+      ? pickOne(Object.keys(HOUSEHOLDS))
+      : (HOUSEHOLDS[householdKey] ? householdKey : 'normal');
+    const hh = HOUSEHOLDS[hKey];
     const s = {
       v: 3,
       name: (name || '').trim().slice(0, 10) || '서연',
@@ -443,7 +724,18 @@
       turn: 0,
       stats: { stamina: 12, academic: 14, coding: 8, art: 10, charm: 12, mental: 14 },
       stress: 8,
-      money: START_MONEY,
+      money: hh.money,
+      household: hKey,
+      bond: 55,
+      debt: 0,
+      deviance: 0,
+      clues: 0,
+      personality: PERSONALITY_KEYS[Math.floor(Math.random() * PERSONALITY_KEYS.length)],
+      personalityRevealed: false,
+      prefs: null,
+      revealedPrefs: [],
+      suggestion: null,
+      hooked: 0,
       flags: {},
       counts: {},
       slots: new Array(TEMPO[tKey].slotsPerTurn).fill(null),
@@ -452,6 +744,16 @@
     };
     const b = BLOOD[s.blood];
     Object.keys(b.bonus).forEach((k) => { s.stats[k] += b.bonus[k]; });
+    Object.keys(hh.bonus || {}).forEach((k) => { s.stats[k] += hh.bonus[k]; });
+    s.prefs = buildPrefs(s.personality);
+    s.titleHistory = [];
+    const t0 = personalityTitle(s);
+    s.titleId = t0.id;
+    s.titleLabel = t0.label;
+    s.titleHistory.push({
+      turn: 0, age: START_AGE, period: START_YEAR + '년',
+      from: null, to: t0.label, toId: t0.id, reason: '10세, 육성이 시작되었어요',
+    });
     return s;
   }
 
@@ -483,7 +785,7 @@
   }
 
   function snapshot(s) {
-    return { stats: Object.assign({}, s.stats), stress: s.stress, money: s.money };
+    return { stats: Object.assign({}, s.stats), stress: s.stress, money: s.money, bond: s.bond };
   }
 
   function diffChips(before, s) {
@@ -496,6 +798,8 @@
     if (dm) chips.push({ key: 'money', label: '자산', delta: dm, kind: 'money' });
     const ds = s.stress - before.stress;
     if (ds) chips.push({ key: 'stress', label: '스트레스', delta: ds, kind: 'stress' });
+    const db = (s.bond || 0) - (before.bond || 0);
+    if (db) chips.push({ key: 'bond', label: '유대감', delta: db, kind: 'bond' });
     return chips;
   }
 
@@ -514,11 +818,57 @@
     return step;
   }
 
+  function prefOf(s, act) {
+    return (s.prefs && s.prefs[act.id]) || 'neutral';
+  }
+
+  // 땡땡이 확률 — 바르게 자라면(유대감 높음·스트레스 낮음·일탈도 낮음) 0
+  function hookyChance(s, act) {
+    if (!act || act.cat === 'rest') return 0;
+    if ((s.deviance || 0) < 15) return 0;
+    let p = 0.04;
+    p += Math.max(0, s.stress - 60) * 0.006;
+    p += Math.max(0, 55 - s.bond) * 0.007;
+    p += ((s.deviance || 0) - 15) * 0.006;
+    const pref = prefOf(s, act);
+    if (pref === 'like') p -= 0.10;
+    if (pref === 'dislike') p += 0.08;
+    if (s.bond >= 75) p -= 0.08;
+    if (s.personality === 'rebel') p += 0.03;
+    return clamp(p, 0, 0.5);
+  }
+
+  function resolveHooky(s, act, pref, before, R) {
+    s.hooked = (s.hooked || 0) + 1;
+    s.counts.hooky = (s.counts.hooky || 0) + 1;
+    const known = (s.clues || 0) > 0;
+    const alt = pickOne(['친구들과 놀기', '몰래 집에서 쉬기', 'PC방', '뒷골목 서성거리기'], R);
+    s.deviance = clamp((s.deviance || 0) + 5, 0, 100);
+    s.stress = clamp(s.stress - 7, 0, 100);
+    if (known) s.bond = clamp(s.bond - 1, 0, 100);
+    if (alt === 'PC방' || alt === '뒷골목 서성거리기') s.money = Math.max(0, s.money - 10);
+    const flavor = known
+      ? '학원에 가지 않고 ' + alt + '을(를) 했어요. 이제는 숨기지도 않습니다.'
+      : '"학원 잘 다녀왔어요!" 딸이 환하게 웃으며 방에 들어갔어요. 그런데 오늘은 이상하게 성과가 없었습니다.';
+    return {
+      act: act, grade: 'hooky', flavor: flavor,
+      reaction: known ? '뻔뻔하게 웃고 있어요.' : '표정이 조금 피곤해 보여요.',
+      pref: pref, chips: known ? diffChips(before, s) : [], hiddenHooky: !known,
+    };
+  }
+
   function resolveSlot(s, actId, rng) {
     const R = rng || Math.random;
     const act = ACT_BY_ID[actId];
     if (!act) return null;
     const before = snapshot(s);
+    const pref = prefOf(s, act);
+
+    // 조건이 쌓였을 때만 땡땡이 (유대감 낮음·스트레스·일탈도)
+    if (act.cat !== 'rest' && R() < hookyChance(s, act)) {
+      return resolveHooky(s, act, pref, before, R);
+    }
+
     const focusVal = act.focus ? (s.stats[act.focus] || 0) : 0;
     let grade;
 
@@ -533,22 +883,32 @@
       else grade = R() < (0.10 + Math.min(0.14, focusVal / 700)) ? 'great' : 'success';
     }
 
-    const mult = grade === 'great' ? 1.8 : grade === 'fail' ? 0.25 : 1;
+    let mult = grade === 'great' ? 1.8 : grade === 'fail' ? 0.25 : 1;
+    if (pref === 'like') mult *= 1.5;
+    else if (pref === 'dislike') mult *= (s.bond >= 70 ? 0.7 : 0.5);
 
     Object.keys(act.gains || {}).forEach((k) => {
       applyGain(s, k, act.gains[k] * mult);
     });
 
     if (act.money) {
-      const m = Math.round(act.money * (grade === 'great' ? 1.6 : grade === 'fail' ? 0.5 : 1));
-      s.money += Math.max(1, m);
+      let m = act.money * (grade === 'great' ? 1.6 : grade === 'fail' ? 0.5 : 1);
+      if (pref === 'like') m *= 1.3;
+      else if (pref === 'dislike') m *= 0.7;
+      s.money += Math.max(1, Math.round(m));
     }
     if (act.cost) s.money = Math.max(0, s.money - act.cost);
 
     let ds = act.stress || 0;
-    if (grade === 'great' && ds > 0) ds *= 0.85;
-    if (grade === 'fail' && ds > 0) ds += 4;
-    if (act.cat === 'rest' && ds < 0) ds *= grade === 'great' ? 1.3 : 1;
+    if (act.cat === 'rest') {
+      if (pref === 'like' && ds < 0) ds *= 1.25;
+      if (grade === 'great' && ds < 0) ds *= 1.3;
+    } else {
+      if (pref === 'like' && ds > 0) ds *= 0.65;
+      if (pref === 'dislike' && ds > 0) ds *= (s.bond >= 70 ? 1.5 : 2);
+      if (grade === 'great' && ds > 0) ds *= 0.85;
+      if (grade === 'fail' && ds > 0) ds += 4;
+    }
     s.stress = clamp(s.stress + Math.round(ds), 0, 100);
 
     s.counts[act.id] = (s.counts[act.id] || 0) + 1;
@@ -558,14 +918,107 @@
       s.flags.viral = true;
     }
 
+    // 유대감 · 일탈도
+    if (act.cat === 'rest') {
+      s.bond = clamp(s.bond + (act.id === 'home' ? 1 : 3), 0, 100);
+      s.deviance = clamp((s.deviance || 0) - 2, 0, 100);
+    } else {
+      if (pref === 'like') {
+        s.bond = clamp(s.bond + 2, 0, 100);
+        s.deviance = clamp((s.deviance || 0) - 1, 0, 100);
+      } else if (pref === 'dislike') {
+        // 스트레스가 쌓인 상태에서의 강요만 관계를 상하게 합니다.
+        s.bond = clamp(s.bond - (s.stress >= 65 ? 2 : s.stress >= 45 ? 1 : 0), 0, 100);
+        if (s.stress >= 65 || s.bond < 35) s.deviance = clamp((s.deviance || 0) + 1, 0, 100);
+      }
+      if (grade === 'fail' && s.stress >= 80) s.deviance = clamp((s.deviance || 0) + 1, 0, 100);
+    }
+    if (s.stress >= 85) s.deviance = clamp((s.deviance || 0) + 1, 0, 100);
+    if (act.bondBonus) s.bond = clamp(s.bond + act.bondBonus, 0, 100);
+
+    if (s.revealedPrefs.indexOf(act.id) < 0) s.revealedPrefs.push(act.id);
+
     const flavor = act.flavor[grade] || act.flavor.success;
-    return { act, grade, flavor, chips: diffChips(before, s) };
+    let reaction = '';
+    if (pref === 'like') {
+      reaction = pickOne(['눈이 반짝이며 먼저 나섰어요.', '시간 가는 줄 모르고 몰입했어요.', '"이거 재밌어!" 스스로 말했어요.'], R);
+    } else if (pref === 'dislike') {
+      reaction = pickOne(['"또 이거야…" 투덜거리며 나갔어요.', '시큰둥한 얼굴로 가방을 쌌습니다.', '하는 둥 마는 둥, 집중하지 못했어요.'], R);
+    }
+    return { act: act, grade: grade, flavor: flavor, reaction: reaction, pref: pref, chips: diffChips(before, s) };
+  }
+
+  /* ---------------- 대화 해석 (응원 vs 압박) ---------------- */
+  function toneOf(s) {
+    if (s.stress >= 72 || s.bond <= 38) return 'pressure';
+    if (s.bond >= 64 && s.stress < 68) return 'support';
+    return 'neutral';
+  }
+
+  function toneLine(tone, personality) {
+    if (tone === 'support') {
+      const m = {
+        curious: '"같이 생각해줘서 고마워."', artistic: '"내 편이 되어줘서 좋아."',
+        social: '"이야기 들어줘서 고마워."', active: '"믿어줘서 고마워!"',
+        rebel: '"…뭐, 고맙다고."', warm: '"사랑해."',
+      };
+      return m[personality] || '"응원해줘서 고마워."';
+    }
+    if (tone === 'pressure') {
+      const m = {
+        curious: '"또 정답만 강요하잖아."', artistic: '"내 마음은 안 물어보면서."',
+        social: '"그냥 들어주기만 해줘도 되는데."', active: '"숨 막혀 죽겠어."',
+        rebel: '"됐어, 내가 알아서 할게."', warm: '"너무해…"',
+      };
+      return m[personality] || '"또 잔소리야…"';
+    }
+    return '딸은 조용히 고개를 끄덕였어요.';
+  }
+
+  function applyTone(s) {
+    const tone = toneOf(s);
+    if (tone === 'support') {
+      s.bond = clamp(s.bond + 2, 0, 100);
+      s.stats.mental += 1;
+    } else if (tone === 'pressure') {
+      s.bond = clamp(s.bond - 3, 0, 100);
+      s.deviance = clamp((s.deviance || 0) + 2, 0, 100);
+    } else {
+      s.bond = clamp(s.bond + 1, 0, 100);
+    }
+    const label = tone === 'support' ? '응원으로 받아들였어요'
+      : tone === 'pressure' ? '압박으로 받아들였어요' : '담담하게 받아들였어요';
+    return { tone: tone, label: label, line: toneLine(tone, s.personality) };
+  }
+
+  function suggestActivity(s, rng) {
+    if (!s.prefs) return null;
+    const liked = ACTIVITIES.filter((a) => s.prefs[a.id] === 'like');
+    if (!liked.length) return null;
+    return pickOne(liked, rng).id;
+  }
+
+  // 턴 종료 시 가정 분위기 정산 — 바르게 키우면 일탈도가 0으로 수렴
+  function endTurn(s) {
+    if (s.stress >= 75) {
+      s.bond = clamp(s.bond - 1, 0, 100);
+      s.deviance = clamp((s.deviance || 0) + 1, 0, 100);
+    }
+    if (s.bond <= 35) s.deviance = clamp((s.deviance || 0) + 1, 0, 100);
+    if (s.stress <= 45 && s.bond >= 65 && s.stats.mental >= 55) {
+      s.deviance = clamp((s.deviance || 0) - 3, 0, 100);
+    }
+    if (s.bond >= 80 && s.stress <= 55) s.stress = clamp(s.stress - 1, 0, 100);
+    s.deviance = clamp(s.deviance || 0, 0, 100);
+    return s;
   }
 
   function addAllowance(s) {
     const t = TEMPO[s.tempo] || TEMPO.quarter;
-    s.money += t.allowance;
-    return t.allowance;
+    const h = HOUSEHOLDS[s.household] || HOUSEHOLDS.normal;
+    const amt = (h.allowance && h.allowance[s.tempo]) || t.allowance;
+    s.money += amt;
+    return amt;
   }
 
   function pickEvent(s, rng) {
@@ -585,8 +1038,132 @@
     return pool[pool.length - 1];
   }
 
+  function pickDiscovery(s, rng) {
+    if ((s.deviance || 0) < 25) return null;
+    const R = rng || Math.random;
+    const chance = clamp(0.16 + (s.deviance || 0) / 320, 0.16, 0.5);
+    if (R() > chance) return null;
+    const pool = EVENTS.filter((e) => e.discovery && !(s.flags && s.flags['disc_' + e.id]) && (!e.when || e.when(s)));
+    if (!pool.length) return null;
+    return pool[Math.floor(R() * pool.length)];
+  }
+
+  /* ---------------- 성격 칭호 (스탯·유대감·일탈도로 실시간 결정) ---------------- */
+  const TITLES = {
+    mask:     { id: 'mask',     label: '겉과 속이 다른 아이', emoji: '🫥', desc: '집에서는 착한데, 밖에서는 다른 얼굴이에요.' },
+    secret:   { id: 'secret',   label: '비밀을 가진 아이',     emoji: '🤫', desc: '요즘 뭔가 숨기는 게 있는 것 같아요.' },
+    rebel:    { id: 'rebel',    label: '예민한 반항아',       emoji: '😤', desc: '말을 걸면 날카롭게 튕겨내요.' },
+    tired:    { id: 'tired',    label: '지친 완벽주의자',     emoji: '😮‍💨', desc: '잘 해내지만, 웃음이 줄었어요.' },
+    artist:   { id: 'artist',   label: '자유로운 예술가',     emoji: '🎨', desc: '자기만의 색이 뚜렷해요.' },
+    star:     { id: 'star',     label: '인기 많은 사교왕',    emoji: '✨', desc: '어디서든 사람이 모여요.' },
+    model:    { id: 'model',    label: '다정한 모범생',       emoji: '📚', desc: '공부도 마음도 반듯해요.' },
+    dev:      { id: 'dev',      label: '꿈꾸는 개발자',       emoji: '💻', desc: '코드로 뭔가 만들어 보는 게 즐거워요.' },
+    ambition: { id: 'ambition', label: '당찬 야망가',         emoji: '🚀', desc: '목표가 생기면 물러서지 않아요.' },
+    athlete:  { id: 'athlete',  label: '에너지 넘치는 활동가', emoji: '🏃', desc: '몸으로 부딪히며 자라요.' },
+    warm:     { id: 'warm',     label: '따뜻한 마음씨',       emoji: '🤝', desc: '남의 아픔을 그냥 지나치지 못해요.' },
+    homebody: { id: 'homebody', label: '방구석 아이',         emoji: '🛋️', desc: '밖으로 나가는 일이 점점 줄었어요.' },
+    curious:  { id: 'curious',  label: '호기심 많은 꿈나무',  emoji: '🔍', desc: '"왜?"를 달고 살아요.' },
+    artistic: { id: 'artistic', label: '감성 가득한 아이',    emoji: '🎨', desc: '조용히 자기 세계를 그려요.' },
+    social:   { id: 'social',   label: '수다스러운 친구',     emoji: '💬', desc: '말하는 걸 좋아하고 사람을 좋아해요.' },
+    active:   { id: 'active',   label: '밖에서 노는 아이',    emoji: '⚽', desc: '집에 있으면 몸이 근질근질해요.' },
+    rebelKid: { id: 'rebelKid', label: '말 안 듣는 아이',     emoji: '🙄', desc: '"싫어"가 먼저 나와요.' },
+    warmKid:  { id: 'warmKid',  label: '다정한 아이',         emoji: '🌷', desc: '먼저 손 내미는 걸 좋아해요.' },
+    ordinary: { id: 'ordinary', label: '평범하지만 씩씩한 아이', emoji: '🌱', desc: '매일 조금씩 자라고 있어요.' },
+  };
+
+  function personalityTitle(s) {
+    const st = s.stats;
+    if ((s.deviance || 0) >= 50) return TITLES.mask;
+    if ((s.deviance || 0) >= 30) return TITLES.secret;
+    if (s.stress >= 75 && s.bond <= 45) return TITLES.rebel;
+    if (s.stress >= 72) return TITLES.tired;
+    if (st.art >= 80 && st.charm >= 65) return TITLES.artist;
+    if (st.charm >= 80) return TITLES.star;
+    if (st.academic >= 80 && st.mental >= 65) return TITLES.model;
+    if (st.coding >= 75) return TITLES.dev;
+    if (st.coding >= 55 && st.charm >= 55) return TITLES.ambition;
+    if (st.stamina >= 75) return TITLES.athlete;
+    if (st.mental >= 70 && (s.counts.volunteer || 0) >= 3) return TITLES.warm;
+    if (st.charm <= 35 && st.stamina <= 35 && s.stress >= 55) return TITLES.homebody;
+    const def = {
+      curious: TITLES.curious, artistic: TITLES.artistic, social: TITLES.social,
+      active: TITLES.active, rebel: TITLES.rebelKid, warm: TITLES.warmKid,
+    }[s.personality];
+    return def || TITLES.ordinary;
+  }
+
+  function syncTitle(s, reason) {
+    const t = personalityTitle(s);
+    if (!s.titleId) {
+      s.titleId = t.id;
+      s.titleLabel = t.label;
+      s.titleHistory = s.titleHistory || [];
+      return null;
+    }
+    if (s.titleId === t.id) return null;
+    const prev = s.titleLabel;
+    s.titleId = t.id;
+    s.titleLabel = t.label;
+    const p = periodInfo(s);
+    s.titleHistory = s.titleHistory || [];
+    s.titleHistory.push({
+      turn: s.turn, age: p.age, period: p.label,
+      from: prev, to: t.label, toId: t.id, reason: reason || '',
+    });
+    return { from: prev, to: t.label, emoji: t.emoji, reason: reason || '' };
+  }
+
   /* ---------------- 엔딩 ---------------- */
   const ENDINGS = [
+    {
+      id: 'hikikomori', emoji: '🏠', title: '방구석 은둔형 외톨이', tag: '닫힌 문',
+      grad: ['#7d8a97', '#3f4854'], bad: true,
+      desc: '스무 살 딸의 방문은 늘 닫혀 있어요. 커튼은 밤낮없이 내려져 있고, 대화는 문 너머로만 오갑니다. 밥은 문 앞에 놓아둡니다.',
+      hint: '스트레스가 높고 체력·매력·유대감이 모두 낮으면 찾아옵니다.',
+      cond: (s) => s.stress >= 70 && s.stats.charm <= 50 && s.stats.stamina <= 50 && s.bond <= 50,
+    },
+    {
+      id: 'troublemaker', emoji: '🕶️', title: '뒷골목 비행 성인', tag: '집을 나간 스무 살',
+      grad: ['#6b7280', '#2b313b'], bad: true,
+      desc: '스무 살 생일, 딸의 방은 비어 있었어요. 마지막 문자는 "미안해요" 세 글자였습니다. 그래도 현관 불은 켜 두었습니다. 언젠가 돌아올 딸을 위해.',
+      hint: '이중생활 일탈도가 75 이상으로 깊어지고, 멘탈과 유대감이 무너지면 찾아옵니다.',
+      cond: (s) => (s.deviance || 0) >= 75 && (s.stats.mental <= 45 || s.bond <= 30),
+    },
+    {
+      id: 'fallen', emoji: '🎭', title: '뒷계정 폭로 · 나락 인플루언서', tag: '무너진 인기',
+      grad: ['#a06bd6', '#5b2f86'], bad: true,
+      desc: '겉으로는 반에서 가장 인기 있는 아이였어요. 그러나 뒷계정의 글이 캡처되어 퍼지고, 학교와 SNS가 들끓었습니다. 딸은 방문을 걸어 잠갔습니다.',
+      hint: '매력이나 예술이 높은데 이중생활이 두 번 이상 발각되면 위험합니다.',
+      cond: (s) => (s.clues || 0) >= 2 && (s.deviance || 0) >= 45 && (s.stats.charm >= 110 || s.stats.art >= 110),
+    },
+    {
+      id: 'doublelife', emoji: '🫥', title: '가면을 쓴 이중생활 셀럽', tag: '아무도 모르는 얼굴',
+      grad: ['#8b7bb8', '#463a6b'], bad: true,
+      desc: '카메라 앞에서는 완벽한 모범생, 계정 뒤에서는 전혀 다른 얼굴. 아무도 그 가면을 의심하지 않았습니다. 엄마·아빠만이 그 미소가 연습이라는 걸 알고 있습니다.',
+      hint: '발각되지 않은 채 일탈도가 50 이상으로 깊어지고 매력·예술이 높으면 찾아옵니다.',
+      cond: (s) => (s.deviance || 0) >= 50 && (s.clues || 0) === 0 && (s.stats.charm >= 95 || s.stats.art >= 95),
+    },
+    {
+      id: 'debt', emoji: '💸', title: '빚더미 · 영끌 인생', tag: '알바비보다 빚이 먼저',
+      grad: ['#c47a5a', '#7a3b2a'], bad: true,
+      desc: '알바비보다 할부금이 먼저 도착합니다. 딸의 통장은 늘 비어 있고, 서류 봉투에는 독촉장이 쌓였어요. "한 번만 더 하면 갚을 수 있어"라는 말이 반복됩니다.',
+      hint: '무리한 투자·할부로 빚이 260만 원을 넘으면 찾아옵니다.',
+      cond: (s) => (s.debt || 0) >= 260 || ((s.debt || 0) >= 140 && s.money <= 100),
+    },
+    {
+      id: 'burnout', emoji: '🌧️', title: '쉼표가 필요한 청춘', tag: '잠시 멈춤',
+      grad: ['#8f9aa8', '#5a6472'], bad: true,
+      desc: '스무 살, 딸은 멋지게 성장했지만 마음의 신호는 이미 빨간불이었어요. 잠시 멈추고 자신을 돌보는 시간이 필요합니다. 그것도 충분히 잘하고 있는 일이에요.',
+      hint: '스트레스를 95 이상으로 두면 찾아오는 엔딩입니다.',
+      cond: (s) => s.stress >= 95,
+    },
+    {
+      id: 'freeter', emoji: '🪑', title: '무기력한 단기 알바 프리터', tag: '목표 없는 하루',
+      grad: ['#9aa39b', '#5b645c'], bad: true,
+      desc: '뚜렷한 목표도, 오래 다닌 일도 없어요. 딸은 단기 알바를 전전하며 하루하루를 보냅니다. "괜찮아, 나중에 뭐든 하면 되지"라고 말하지만, 나중은 계속 미뤄집니다.',
+      hint: '모든 능력치가 55 이하로 남으면 찾아옵니다. 아무것도 하지 않은 10년의 결과입니다.',
+      cond: (s) => Math.max(s.stats.stamina, s.stats.academic, s.stats.coding, s.stats.art, s.stats.charm, s.stats.mental) <= 55,
+    },
     {
       id: 'idol', emoji: '🎤', title: 'K-POP 아이돌', tag: '무대 위의 별',
       grad: ['#ff8fb1', '#ff4f86'],
@@ -668,15 +1245,8 @@
       id: 'landlord', emoji: '🏢', title: '건물주 · 파이어족', tag: '경제적 자유',
       grad: ['#d6b25e', '#a07c2e'],
       desc: '처음 모은 용돈이 종잣돈이 되었어요. 이제 딸은 좋아하는 일만 골라서 할 수 있습니다. 월세 통장을 확인하며 딸이 웃었습니다. "이게 진짜야?"',
-      hint: '알바로 자산을 크게 모아 보세요.',
-      cond: (s) => s.money >= 5500,
-    },
-    {
-      id: 'burnout', emoji: '🌧️', title: '쉼표가 필요한 청춘', tag: '잠시 멈춤',
-      grad: ['#8f9aa8', '#5a6472'],
-      desc: '스무 살, 딸은 멋지게 성장했지만 마음의 신호는 이미 빨간불이었어요. 잠시 멈추고 자신을 돌보는 시간이 필요합니다. 그것도 충분히 잘하고 있는 일이에요.',
-      hint: '스트레스를 95 이상으로 두면 찾아오는 엔딩입니다.',
-      cond: (s) => s.stress >= 95,
+      hint: '알바·인턴으로 꾸준히 벌어 자산을 5,500만 원 이상 모아 보세요.',
+      cond: (s) => s.money >= 5500 && ((s.counts.parttime || 0) + (s.counts.intern || 0) + (s.counts.tutor || 0) + (s.counts.creator || 0)) >= 20,
     },
     {
       id: 'ordinary', emoji: '🌷', title: '행복한 사회인', tag: '평범하지만 단단한',
@@ -704,8 +1274,10 @@
     STAT_META, STAT_KEYS, BLOOD, TEMPO, SEASONS, MONTH_EMOJI, GRADE_BY_AGE,
     ACTIVITIES, ACT_BY_ID, CAT_META, EVENTS, EVENT_BY_ID, FESTIVAL,
     ENDINGS, ENDING_BY_ID,
+    PERSONALITIES, PERSONALITY_KEYS, buildPrefs, TITLES, personalityTitle, syncTitle, HOUSEHOLDS,
     clamp, gradeOf, periodInfo, newState, snapshot, diffChips, applyGain,
-    resolveSlot, resolveFestival, addAllowance, pickEvent, computeEnding,
+    resolveSlot, resolveFestival, addAllowance, pickEvent, pickDiscovery, computeEnding,
+    hookyChance, toneOf, applyTone, suggestActivity, endTurn, prefOf,
   };
 
   root.PMEngine = API;
