@@ -1027,3 +1027,45 @@ body.is-locked #overlay-root { display: none !important; }
   30%, 50%, 70% { transform: translateX(-7px); }
   40%, 60% { transform: translateX(7px); }
 }
+
+/* ==========================================================
+   아빠의 시간 vs 돈 선택
+   ========================================================== */
+.dad-box {
+  margin-top: 14px;
+  background: #fbf4ea;
+  border: 1px dashed #e8d6bf;
+  border-radius: 16px;
+  padding: 11px 12px 12px;
+}
+.dad-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #8a6b4f;
+  margin-bottom: 8px;
+}
+.dad-head > span:first-child { white-space: nowrap; }
+.dad-note { font-size: 10.5px; font-weight: 700; color: #a8917d; text-align: right; }
+.dad-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.dad-toggle button {
+  border: 1.5px solid #ebdfcd;
+  background: #fffdfa;
+  border-radius: 12px;
+  padding: 10px 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #6f5b49;
+  line-height: 1.35;
+  transition: all .16s;
+}
+.dad-toggle button.is-on {
+  border-color: #ff9a6b;
+  background: linear-gradient(180deg, #fff3e8, #ffe7d4);
+  color: #b9562e;
+  box-shadow: 0 10px 20px -16px rgba(220, 110, 60, .9);
+}
+.tag.lock { background: #f1eefb; color: #6b55b7; }
