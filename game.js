@@ -234,7 +234,7 @@
       btn.type = 'button';
       btn.className = 'house-btn' + (setup.household === key ? ' is-on' : '');
       btn.innerHTML = '<span class="house-emoji">' + h.emoji + '</span><b>' + h.label + '</b><small>' +
-        (isRandom ? '무작위 배정' : (h.money + '만 원 시작')) + '</small>';
+        (isRandom ? '무작위 배정' : (fmt(h.money) + '만 원 시작')) + '</small>';
       btn.addEventListener('click', () => {
         setup.household = key;
         Sound.sfx('click');
@@ -445,7 +445,7 @@
         main.innerHTML = '<span class="slot-no">' + (i + 1) + '</span>' +
           '<span class="slot-icon" style="opacity:.45">＋</span>' +
           '<span class="slot-body"><span class="slot-title">일정을 선택하세요</span>' +
-          '<span class="slot-sub">학원 · 알바 · 휴식에서 고르기</span></span>';
+          '<span class="slot-sub">학원 · 무료 · 알바 · 휴식에서 고르기</span></span>';
       }
       main.addEventListener('click', () => openPicker(i));
       row.appendChild(main);
@@ -1037,6 +1037,7 @@
       '<button class="choice" id="m-save"><span><span class="choice-label">저장하고 타이틀로</span><span class="choice-hint">진행 상황은 자동 저장돼요</span></span><span class="choice-arrow">↩</span></button>' +
       '<button class="choice" id="m-diary"><span><span class="choice-label">성장 일기</span><span class="choice-hint">성격이 어떻게 변해왔는지 타임라인</span></span><span class="choice-arrow">📔</span></button>' +
       '<button class="choice" id="m-sound"><span><span class="choice-label">소리 ' + (Sound.enabled ? '끄기' : '켜기') + '</span><span class="choice-hint">BGM과 효과음</span></span><span class="choice-arrow">🔊</span></button>' +
+      '<button class="choice" id="m-lock"><span><span class="choice-label">잠금 화면으로</span><span class="choice-hint">비밀번호를 다시 입력해야 해요</span></span><span class="choice-arrow">🔐</span></button>' +
       '<button class="choice" id="m-new"><span><span class="choice-label">새 게임</span><span class="choice-hint">지금 기록을 지우고 다시 시작해요</span></span><span class="choice-arrow">🔄</span></button>' +
       '<button class="choice" id="m-close"><span><span class="choice-label">닫기</span><span class="choice-hint">계속 육성하기</span></span><span class="choice-arrow">✕</span></button>' +
       '</div>', 'menu-overlay');
@@ -1056,6 +1057,10 @@
       Sound.toggle();
       overlay.remove();
       openMenu();
+    });
+    overlay.querySelector('#m-lock').addEventListener('click', () => {
+      try { sessionStorage.removeItem('pm2026.unlocked'); } catch (e) { /* ignore */ }
+      window.location.reload();
     });
     overlay.querySelector('#m-new').addEventListener('click', async () => {
       const ok = await confirmModal('새 게임을 시작할까요?', '지금까지의 육성 기록이 사라져요. 엔딩 도감은 그대로 남습니다.', '새로 시작', true);
