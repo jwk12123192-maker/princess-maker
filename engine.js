@@ -144,9 +144,9 @@
       },
     },
     {
-      id: 'creator', cat: 'work', name: '유튜브·릴스 크리에이터', icon: '📱', money: 25, stress: 8, focus: 'art', minAge: 13,
+      id: 'creator', cat: 'work', name: '유튜브·릴스 크리에이터', icon: '📱', money: 25, stress: 8, focus: 'art', minAge: 17,
       gains: { art: 2, charm: 2 },
-      desc: '편집하고 올리고, 반응을 확인해요.',
+      desc: '편집하고 올리고, 반응을 확인해요. 17세부터 수익 활동을 시작해요.',
       flavor: {
         success: '영상 하나를 완성해 올렸어요. 조회수가 천을 넘었습니다.',
         great: '알고리즘을 탔어요! 댓글이 폭발하고 있어요.',
