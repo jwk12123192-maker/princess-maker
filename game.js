@@ -559,6 +559,7 @@
       const tags = [];
       if (act.cost) tags.push('<span class="tag cost">-' + act.cost + '만</span>');
       if (act.money) tags.push('<span class="tag earn">+' + act.money + '만</span>');
+      if (act.bondBonus) tags.push('<span class="tag like">💗 유대감 +' + act.bondBonus + '</span>');
       tags.push('<span class="tag stress">스트레스 ' + (act.stress > 0 ? '+' : '') + act.stress + '</span>');
       Object.keys(act.gains || {}).forEach((k) => {
         const v = act.gains[k];

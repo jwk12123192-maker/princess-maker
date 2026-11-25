@@ -361,12 +361,12 @@ img { display: block; max-width: 100%; }
 }
 
 /* ---------- 초상화 ---------- */
-.portrait-card { display: flex; align-items: center; gap: 14px; }
+.portrait-card { display: flex; align-items: flex-start; gap: 14px; }
 .portrait {
   position: relative;
   flex: none;
-  width: 96px;
-  height: 116px;
+  width: 100px;
+  height: 122px;
   border-radius: 20px;
   overflow: hidden;
   background: #f0e2d1;
