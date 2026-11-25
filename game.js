@@ -472,11 +472,24 @@
     });
   }
 
+  function renderDad() {
+    if (!state) return;
+    const mode = state.dadMode || 'time';
+    $$('#dad-toggle button').forEach((b) => {
+      b.classList.toggle('is-on', b.dataset.mode === mode);
+    });
+    const note = $('#dad-note');
+    if (note) note.textContent = mode === 'work' ? '수입은 늘지만, 딸이 외로워해요' : '유대감이 조금씩 올라가요';
+    const dp = $('#dad-period');
+    if (dp) dp.textContent = E.TEMPO[state.tempo].unit;
+  }
+
   function renderAll(animate) {
     if (!state) return;
     renderPortrait();
     renderStats(!!animate);
     renderSlots();
+    renderDad();
     const chosen = state.slots.filter(Boolean).length;
     const btn = $('#btn-run');
     btn.disabled = busy || chosen === 0;
@@ -555,7 +568,9 @@
 
     const list = overlay.querySelector('#picker-list');
     E.ACTIVITIES.filter((a) => a.cat === pickerTab).forEach((act) => {
-      const disabled = (act.cost || 0) > budget;
+      const curAge = E.ageOf(state);
+      const locked = act.minAge && curAge < act.minAge;
+      const disabled = locked || (act.cost || 0) > budget;
       const selected = state.slots[pickerSlot] === act.id;
       const card = document.createElement('button');
       card.type = 'button';
@@ -575,13 +590,15 @@
         if (pv === 'like') tags.unshift('<span class="tag like">❤️ 좋아함</span>');
         else if (pv === 'dislike') tags.unshift('<span class="tag dislike">💢 싫어함</span>');
       }
-      if (disabled) tags.push('<span class="tag cost">자산 부족</span>');
+      if (locked) tags.push('<span class="tag lock">🔒 ' + act.minAge + '세부터 가능</span>');
+      else if ((act.cost || 0) > budget) tags.push('<span class="tag cost">자산 부족</span>');
       card.innerHTML = '<span class="act-icon">' + act.icon + '</span>' +
         '<span class="act-body"><span class="act-name">' + act.name + '</span>' +
         '<span class="act-desc">' + act.desc + '</span>' +
         '<span class="act-meta">' + tags.join('') + '</span></span>' +
         '<span class="act-check">✓</span>';
       card.addEventListener('click', () => {
+        if (locked) { toast('🔒 ' + act.minAge + '세부터 할 수 있는 활동이에요.', 'bad'); return; }
         state.slots[pickerSlot] = act.id;
         save();
         overlay.remove();
@@ -718,7 +735,7 @@
     summary.className = 'res';
     summary.innerHTML = '<div class="res-head"><span class="res-ico">💰</span><span class="res-name">' +
       E.TEMPO[state.tempo].unit + ' 정산</span><span class="res-grade success">정산</span></div>' +
-      '<p class="res-text">생활비 ' + allowance + '만 원이 들어왔어요. 보유 자산은 ' + fmt(state.money) + '만 원입니다.' +
+      '<p class="res-text">' + (state.dadMode === 'work' ? '생활비와 야근 수당 ' : '생활비 ') + allowance + '만 원이 들어왔어요. 보유 자산은 ' + fmt(state.money) + '만 원입니다.' +
       (state.stress >= 75 ? ' 스트레스가 많이 쌓였어요. 다음 일정에는 휴식을 넣어 주세요.' : '') + '</p>' +
       '<div class="chips"><span class="chip money">자산 +' + allowance + '</span>' +
       '<span class="chip ' + (state.stress >= 65 ? 'stress' : 'stress down') + '">스트레스 ' + state.stress + '</span></div>';
@@ -834,8 +851,7 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'choice';
-        btn.innerHTML = '<span><span class="choice-label">' + c.label + '</span>' +
-          '<span class="choice-hint">' + (c.hint || '') + '</span></span><span class="choice-arrow">›</span>';
+        btn.innerHTML = '<span class="choice-label">' + c.label + '</span><span class="choice-arrow">›</span>';
         btn.addEventListener('click', () => {
           const before = E.snapshot(state);
           const text = c.apply(state) || '';
@@ -879,16 +895,8 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'choice';
-        let hint;
-        if (c.test) {
-          const val = state.stats[c.test];
-          hint = E.STAT_META[c.test].label + ' ' + val + ' · 우승 시 300만 원';
-        } else {
-          hint = '스트레스가 조금 줄어요';
-        }
         btn.innerHTML = '<span style="font-size:20px">' + c.icon + '</span>' +
-          '<span><span class="choice-label">' + c.label + '</span>' +
-          '<span class="choice-hint">' + hint + '</span></span><span class="choice-arrow">›</span>';
+          '<span class="choice-label">' + c.label + '</span><span class="choice-arrow">›</span>';
         btn.addEventListener('click', () => {
           const res = E.resolveFestival(state, c.id);
           box.style.display = 'none';
@@ -1097,6 +1105,7 @@
       state.frac = state.frac || {};
       if (!state.household || !E.HOUSEHOLDS[state.household]) state.household = 'normal';
       if (typeof state.bond !== 'number') state.bond = 55;
+      if (state.dadMode !== 'work' && state.dadMode !== 'time') state.dadMode = 'time';
       if (typeof state.deviance !== 'number') state.deviance = 0;
       if (typeof state.clues !== 'number') state.clues = 0;
       if (typeof state.debt !== 'number') state.debt = 0;
@@ -1141,6 +1150,15 @@
         if (target === 'title') refreshTitle();
         show(target);
         if (target === 'setup') renderSetup();
+      });
+    });
+    $$('#dad-toggle button').forEach((b) => {
+      b.addEventListener('click', () => {
+        if (!state) return;
+        state.dadMode = b.dataset.mode;
+        save();
+        renderDad();
+        Sound.sfx('click');
       });
     });
     $('#btn-run').addEventListener('click', runTurn);

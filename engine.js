@@ -134,7 +134,7 @@
 
     /* ---- 알바 · 대외활동 ---- */
     {
-      id: 'parttime', cat: 'work', name: '편의점·카페 알바', icon: '🥤', money: 45, stress: 10, focus: 'charm',
+      id: 'parttime', cat: 'work', name: '편의점·카페 알바', icon: '🥤', money: 45, stress: 10, focus: 'charm', minAge: 17,
       gains: { stamina: 1, charm: 1, academic: -1 },
       desc: '직접 번 돈의 무게를 배워요.',
       flavor: {
@@ -144,7 +144,7 @@
       },
     },
     {
-      id: 'creator', cat: 'work', name: '유튜브·릴스 크리에이터', icon: '📱', money: 25, stress: 8, focus: 'art',
+      id: 'creator', cat: 'work', name: '유튜브·릴스 크리에이터', icon: '📱', money: 25, stress: 8, focus: 'art', minAge: 13,
       gains: { art: 2, charm: 2 },
       desc: '편집하고 올리고, 반응을 확인해요.',
       flavor: {
@@ -154,7 +154,7 @@
       },
     },
     {
-      id: 'volunteer', cat: 'work', name: '봉사활동', icon: '🤝', money: 0, stress: 3, focus: 'mental',
+      id: 'volunteer', cat: 'work', name: '봉사활동', icon: '🤝', money: 0, stress: 3, focus: 'mental', minAge: 12,
       gains: { mental: 3, charm: 1, academic: 1 },
       desc: '지역 아동센터에서 아이들을 도와요.',
       flavor: {
@@ -164,7 +164,7 @@
       },
     },
     {
-      id: 'tutor', cat: 'work', name: '과외·학습 멘토', icon: '📝', money: 60, stress: 9, focus: 'academic',
+      id: 'tutor', cat: 'work', name: '과외·학습 멘토', icon: '📝', money: 60, stress: 9, focus: 'academic', minAge: 17,
       gains: { academic: 3, mental: 1 },
       desc: '가르치면서 내 실력도 다져요.',
       flavor: {
@@ -174,7 +174,7 @@
       },
     },
     {
-      id: 'intern', cat: 'work', name: 'IT 인턴·공모전', icon: '🧑‍💻', money: 70, stress: 11, focus: 'coding',
+      id: 'intern', cat: 'work', name: 'IT 인턴·공모전', icon: '🧑‍💻', money: 70, stress: 11, focus: 'coding', minAge: 17,
       gains: { coding: 3, academic: 2 },
       desc: '실무 프로젝트와 공모전 준비로 스펙을 쌓아요.',
       flavor: {
@@ -206,9 +206,9 @@
       },
     },
     {
-      id: 'freeChore', cat: 'free', name: '집안일 돕기', icon: '🧹', cost: 0, stress: 2, focus: 'mental',
+      id: 'freeChore', cat: 'free', name: '집안일 돕기', icon: '🧹', cost: 0, money: 5, stress: 2, focus: 'mental',
       gains: { mental: 2 }, bondBonus: 2,
-      desc: '같이 살림을 하면 마음도 가까워져요.',
+      desc: '같이 살림을 하면 마음도 가까워져요. 소액의 용돈도 받아요.',
       flavor: {
         success: '설거지를 같이 했어요. 물을 튀기며 웃었습니다.',
         great: '딸이 먼저 "오늘은 내가 할게"라고 했어요. 마음이 뭉클했습니다.',
@@ -218,7 +218,7 @@
 
     /* ---- 프리미엄 수업 ---- */
     {
-      id: 'premiumTutor', cat: 'class', name: '1:1 프리미엄 과외', icon: '💎', cost: 150, stress: 6, focus: 'academic',
+      id: 'premiumTutor', cat: 'class', name: '1:1 프리미엄 과외', icon: '💎', cost: 150, stress: 6, focus: 'academic', minAge: 12,
       gains: { academic: 8, mental: 1 },
       desc: '유명 강사와 1대1. 비싸지만 확실해요.',
       flavor: {
@@ -228,7 +228,7 @@
       },
     },
     {
-      id: 'globalCamp', cat: 'class', name: '해외 글로벌 캠프', icon: '✈️', cost: 350, stress: 2, focus: 'charm',
+      id: 'globalCamp', cat: 'class', name: '해외 글로벌 캠프', icon: '✈️', cost: 350, stress: 2, focus: 'charm', minAge: 12,
       gains: { academic: 4, charm: 6, mental: 2 },
       desc: '여름방학 해외 캠프에서 세상을 배워요.',
       flavor: {
@@ -275,7 +275,7 @@
   ACTIVITIES.forEach((a) => { ACT_BY_ID[a.id] = a; });
   const CAT_META = {
     class: { label: '학원 · 수업', icon: '🏫' },
-    free:  { label: '무료 활동', icon: '🆓' },
+    free:  { label: '무료·집안일', icon: '🆓' },
     work:  { label: '알바 · 활동', icon: '💼' },
     rest:  { label: '휴식 · 여가', icon: '🌿' },
   };
@@ -321,7 +321,7 @@
     {
       id: 'shorts', weight: 6, kicker: '스마트폰 · 숏폼', title: '릴스가 멈추질 않아요',
       desc: '새벽까지 쇼츠를 넘기는 소리가 들려요. "이거 진짜 웃겨"라며 웃고 있는데, 내일은 학교 가는 날입니다.',
-      when: (s) => s.age >= 11,
+      when: (s) => ageOf(s) >= 11,
       choices: [
         { label: '폰을 압수하고 공부시키기', hint: '학업 ↑ · 스트레스 ↑',
           apply(s) { s.stats.academic += 6; s.stress = clamp(s.stress + 12, 0, 100); s.stats.mental = Math.max(0, s.stats.mental - 2); return '딸은 뾰로통했지만 결국 책상에 앉았어요. 시험 범위는 조금 줄었습니다.'; } },
@@ -332,7 +332,7 @@
     {
       id: 'pandemic', weight: 4, kicker: '전염병 유행 · 비대면', title: '학교가 온라인 수업으로 바뀌었어요',
       desc: '감염병이 다시 유행하면서 한 달간 원격 수업이 시작됐어요. 집에 있는 시간이 확 늘었습니다.',
-      when: (s) => s.age >= 11 && s.age <= 16,
+      when: (s) => ageOf(s) >= 11 && ageOf(s) <= 16,
       choices: [
         { label: '집에서 틈새 코딩·독학 지원', hint: '코딩 ↑ · 학업 ↑ · 스트레스 ↑',
           apply(s) { s.stats.coding += 5; s.stats.academic += 4; s.stress = clamp(s.stress + 8, 0, 100); return '집중이 안 될 법도 한데, 딸은 온라인 강의를 두 배속으로 돌려가며 끝까지 들었어요.'; } },
@@ -343,7 +343,7 @@
     {
       id: 'genai', weight: 6, kicker: '생성형 AI 시대', title: '"AI로 숙제 끝냈어"',
       desc: '딸이 태연하게 말해요. "요즘 애들은 다 써." 숙제는 30분 만에 끝나 있었습니다.',
-      when: (s) => s.age >= 12,
+      when: (s) => ageOf(s) >= 12,
       choices: [
         { label: 'AI 프롬프트 활용법을 같이 배우기', hint: '코딩 ↑ · 학업 ↑',
           apply(s) { s.stats.coding += 5; s.stats.academic += 4; s.stress = clamp(s.stress + 3, 0, 100); s.flags.aiSkill = true; return '딸이 AI에게 질문을 다듬는 법을 익혔어요. "AI는 답을 주는 게 아니라 같이 생각하는 거네."'; } },
@@ -354,7 +354,7 @@
     {
       id: 'invest', weight: 4, kicker: '재테크 · 영끌', title: '알바로 모은 돈, 어디에 둘까요?',
       desc: '딸의 통장에 알바비가 제법 모였어요. 친구들은 "ETF", "테마주" 이야기를 하고 있습니다.',
-      when: (s) => s.age >= 15 && s.money >= 100,
+      when: (s) => ageOf(s) >= 15 && s.money >= 100,
       choices: [
         { label: '소액 ETF·적금으로 안전 투자', hint: '자산 소폭 ↑ · 멘탈 ↑',
           apply(s) { const g = Math.max(8, Math.round(s.money * 0.06)); s.money += g; s.stats.mental += 2; s.flags.safeInvest = true; return '수익률은 크지 않지만 매달 자동이체를 걸었어요. "천천히 가는 게 편해."'; } },
@@ -371,7 +371,7 @@
     {
       id: 'audition', weight: 4, kicker: 'K-POP · 글로벌 붐', title: '길거리 캐스팅 제안을 받았어요',
       desc: '홍대에서 연습생 스카우트가 명함을 건넸어요. "목소리랑 표정이 좋다"고 합니다.',
-      when: (s) => s.age >= 12 && s.stats.charm >= 38,
+      when: (s) => ageOf(s) >= 12 && s.stats.charm >= 38,
       choices: [
         { label: '오디션에 도전해 보기', hint: '매력 ↑ · 예술 ↑ · 학업 ↓',
           apply(s) { s.stats.charm += 5; s.stats.art += 4; s.stats.academic = Math.max(0, s.stats.academic - 2); s.stress = clamp(s.stress + 8, 0, 100); s.money += 30; s.flags.cast = true; return '오디션장에서 세 시간을 기다렸어요. 결과는 아직이지만 딸의 눈이 반짝입니다.'; } },
@@ -382,7 +382,7 @@
     {
       id: 'hagwon', weight: 6, kicker: '사교육 경쟁', title: '반 친구들은 다 선행학습 중이래요',
       desc: '학부모 단체방에 "이번 방학 특강" 안내가 올라왔어요. 옆집 아이는 이미 두 단계 앞서 있습니다.',
-      when: (s) => s.age >= 11 && s.money >= 50,
+      when: (s) => ageOf(s) >= 11 && s.money >= 50,
       choices: [
         { label: '특강 추가 등록', hint: '학업 ↑ · 자산 ↓ · 스트레스 ↑',
           apply(s) { s.money = Math.max(0, s.money - 50); s.stats.academic += 7; s.stress = clamp(s.stress + 10, 0, 100); return '주말도 학원이 되었어요. 딸은 조용히 가방을 쌌습니다.'; } },
@@ -393,7 +393,7 @@
     {
       id: 'examWeek', weight: 5, kicker: '학교 생활', title: '중간고사가 일주일 앞이에요',
       desc: '딸이 시험 범위를 펼쳐 놓고 한숨을 쉬었어요. "밤새면 다 외울 수 있을까?"',
-      when: (s) => s.age >= 11,
+      when: (s) => ageOf(s) >= 11,
       choices: [
         { label: '밤새 함께 공부한다', hint: '학업 ↑ · 체력 ↓ · 스트레스 ↑',
           apply(s) { s.stats.academic += 7; s.stats.stamina = Math.max(0, s.stats.stamina - 3); s.stress = clamp(s.stress + 12, 0, 100); return '새벽 2시, 딸이 스스로 책을 덮었어요. "나 잘했지?"'; } },
@@ -415,7 +415,7 @@
     {
       id: 'cyber', weight: 4, kicker: '사이버 폭력', title: 'SNS에 악플이 달렸어요',
       desc: '딸의 게시물에 모르는 사람이 상처가 되는 댓글을 남겼어요. 딸은 폰을 뒤집어 놓았습니다.',
-      when: (s) => s.age >= 12 && (s.flags.creator || s.counts.creator >= 1 || s.flags.cast),
+      when: (s) => ageOf(s) >= 12 && (s.flags.creator || s.counts.creator >= 1 || s.flags.cast),
       choices: [
         { label: '함께 신고하고 마음을 돌보기', hint: '멘탈 ↑ · 스트레스 ↓',
           apply(s) { s.stats.mental += 6; s.stress = clamp(s.stress - 6, 0, 100); s.flags.resilient = true; return '신고 버튼을 누르고, 좋아하는 음식을 먹으며 이야기를 나눴어요. "별일 아니야"라고 말하는 목소리가 조금 안정됐습니다.'; } },
@@ -426,7 +426,7 @@
     {
       id: 'friend', weight: 4, kicker: '친구 관계', title: '친구와 다툰 날',
       desc: '딸이 가방을 내려놓으며 말했어요. "걔는 나한테만 그렇게 말해."',
-      when: (s) => s.age >= 11,
+      when: (s) => ageOf(s) >= 11,
       choices: [
         { label: '먼저 사과해 보자고 하기', hint: '멘탈 ↑ · 매력 ↑',
           apply(s) { s.stats.mental += 6; s.stats.charm += 3; s.stress = clamp(s.stress - 4, 0, 100); return '다음 날 딸이 먼저 말을 걸었어요. 둘은 떡볶이를 먹으러 갔습니다.'; } },
@@ -457,7 +457,7 @@
     {
       id: 'club', weight: 4, kicker: '동아리', title: '"코딩 동아리 같이 하자"',
       desc: '딸의 친구가 동아리 가입을 권했어요. 방과 후에 앱을 만든다고 합니다.',
-      when: (s) => s.stats.coding >= 35 && s.age >= 13,
+      when: (s) => s.stats.coding >= 35 && ageOf(s) >= 13,
       choices: [
         { label: '수락한다', hint: '코딩 ↑ · 스트레스 ↑',
           apply(s) { s.stats.coding += 5; s.stress = clamp(s.stress + 5, 0, 100); s.flags.club = true; return '첫 프로젝트는 급식 메뉴 알림 앱. 친구들이 진짜로 써줬어요.'; } },
@@ -479,7 +479,7 @@
     {
       id: 'career', weight: 5, kicker: '진로 대화', title: '"나 커서 뭐 해야 해?"',
       desc: '저녁 식탁에서 딸이 물었어요. "좋아하는 걸 해야 해, 아니면 잘하는 걸 해야 해?"',
-      when: (s) => s.age >= 15,
+      when: (s) => ageOf(s) >= 15,
       choices: [
         { label: '안정적인 길도 좋다고 말하기', hint: '멘탈 ↑ · 학업 ↑',
           apply(s) { s.stats.mental += 5; s.stats.academic += 3; s.flags.stable = true; return '딸은 "그럼 공무원이나 대기업?"이라며 웃었어요. 현실적인 감각이 생겼습니다.'; } },
@@ -524,7 +524,7 @@
       id: 'disc_card', discovery: true, weight: 9,
       kicker: '수상한 낌새 · 카드 내역', title: '카드 내역에 모르는 결제가 찍혔어요',
       desc: '용돈을 준 적 없는 시간에 편의점, 코인노래방, PC방 결제가 줄줄이 찍혀 있어요. 딸은 "친구가 샀어"라고 합니다.',
-      when: (s) => (s.deviance || 0) >= 25 && s.age >= 12,
+      when: (s) => (s.deviance || 0) >= 25 && ageOf(s) >= 12,
       choices: [
         { label: '용돈과 지출을 함께 정리한다', hint: '유대감 ↑ · 일탈도 ↓',
           apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 8, 0, 100); s.bond = clamp(s.bond + 6, 0, 100); s.money = Math.max(0, s.money - 20); return '가계부를 같이 쓰기로 했어요. 딸이 "다음엔 말하고 쓸게"라고 했습니다.'; } },
@@ -538,7 +538,7 @@
       id: 'disc_street', discovery: true, weight: 8,
       kicker: '수상한 낌새 · 우연한 목격', title: '길에서 딸을 마주쳤어요',
       desc: '퇴근길, 골목에서 딸을 봤어요. 교복 위에 후드티를 걸치고, 담배 연기가 나는 무리 속에 있었습니다. 딸은 "잠깐 지나가는 길"이라고 합니다.',
-      when: (s) => (s.deviance || 0) >= 35 && s.age >= 14,
+      when: (s) => (s.deviance || 0) >= 35 && ageOf(s) >= 14,
       choices: [
         { label: '그 자리에서 데리고 집으로 온다', hint: '유대감 ↓ · 일탈도 ↓↓',
           apply(s) { s.clues = Math.min(9, (s.clues || 0) + 1); s.deviance = clamp(s.deviance - 14, 0, 100); s.bond = clamp(s.bond - 8, 0, 100); s.stress = clamp(s.stress + 10, 0, 100); s.stats.mental += 2; return '집으로 오는 내내 딸은 아무 말도 하지 않았어요. 현관에서 "미안해요"라고 했습니다.'; } },
@@ -553,7 +553,7 @@
     id: 'overspend', weight: 5,
     kicker: '21세기 소비 · 영끌', title: '친구들은 다 가진 게 있대요',
     desc: '한정판 운동화와 최신 스마트폰 이야기가 식탁에서 나옵니다. 딸은 "할부로 하면 한 달에 얼마 안 해"라고 말해요.',
-    when: (s) => s.age >= 13,
+    when: (s) => ageOf(s) >= 13,
     choices: [
       { label: '할부로 사준다', hint: '매력 ↑ · 자산 ↓ · 빚 ↑',
         apply(s) { const price = 120; const pay = Math.min(s.money, price); s.money -= pay; s.debt = (s.debt || 0) + (price - pay); s.stats.charm += 6; s.stress = clamp(s.stress + 4, 0, 100); s.flags.overspent = true; return '딸은 좋아했지만, 다음 달 할부 문자가 날아왔습니다. ' + (price - pay) + '만 원이 빚으로 남았어요.'; } },
@@ -569,7 +569,7 @@
     {
       id: 'hh_startup', weight: 5, kicker: '가족 경제 · 도전', title: '아빠가 창업을 고민하고 있어요',
       desc: '퇴사하고 작은 가게를 열고 싶다는 말을 꺼냈어요. 딸은 식탁에서 조용히 듣고 있습니다.',
-      when: (s) => s.age >= 12,
+      when: (s) => ageOf(s) >= 12,
       choices: [
         { label: '딸과 상의하고 도전한다', hint: '대박 또는 위기 · 유대감 ↑',
           apply(s) {
@@ -590,7 +590,7 @@
     {
       id: 'hh_crisis', weight: 6, kicker: '가족 경제 · 위기', title: '갑작스러운 병원비가 생겼어요',
       desc: '할머니가 다치셔서 병원비가 필요합니다. 통장 잔고를 보며 한숨이 나옵니다.',
-      when: (s) => s.age >= 11,
+      when: (s) => ageOf(s) >= 11,
       choices: [
         { label: '딸에게 솔직히 말한다', hint: '유대감 ↑↑ · 자산 ↓',
           apply(s) { const cost = Math.min(s.money, 80); s.money -= cost; s.bond = clamp(s.bond + 10, 0, 100); s.stats.mental += 3; s.stress = clamp(s.stress + 4, 0, 100); return '"우리 조금 아껴 쓰자." 딸이 먼저 말했어요. ' + cost + '만 원이 나갔지만 마음은 가까워졌습니다.'; } },
@@ -603,7 +603,7 @@
     {
       id: 'hh_scam', weight: 4, kicker: '가족 경제 · 사기', title: '"고수익 보장" 투자 리딩방 초대',
       desc: '아빠 휴대폰에 낯선 사람이 "3개월 안에 두 배"라며 투자방 링크를 보냈어요. 딸도 옆에서 화면을 보고 있습니다.',
-      when: (s) => s.age >= 13,
+      when: (s) => ageOf(s) >= 13,
       choices: [
         { label: '참여해 본다', hint: '대박 또는 사기 피해',
           apply(s) {
@@ -620,7 +620,7 @@
     {
       id: 'hh_appliance', weight: 5, kicker: '가족 경제 · 지출', title: '세탁기가 고장 났어요',
       desc: '빨래가 쌓여 있는데 세탁기가 멈췄어요. 수리비 견적은 60만 원입니다.',
-      when: (s) => s.age >= 10,
+      when: (s) => ageOf(s) >= 10,
       choices: [
         { label: '바로 고친다', hint: '자산 ↓ · 멘탈 ↑',
           apply(s) { const cost = Math.min(s.money, 60); s.money -= cost; s.stats.mental += 1; return '수리 기사님이 와서 30분 만에 고쳐주셨어요. ' + cost + '만 원이 들었지만 집이 다시 평화로워졌습니다.'; } },
@@ -633,7 +633,7 @@
     {
       id: 'hh_help', weight: 6, kicker: '가족 경제 · 살림', title: '딸이 살림을 보태겠대요',
       desc: '딸이 알바로 모은 돈을 내밀며 "학원비에 보태 써"라고 합니다. 통장 잔고가 빠듯한 걸 알고 있었어요.',
-      when: (s) => s.money < 220 && s.age >= 14,
+      when: (s) => s.money < 220 && ageOf(s) >= 14,
       choices: [
         { label: '고맙게 받는다', hint: '자산 ↑ · 유대감 ↑↑',
           apply(s) { s.money += 100; s.bond = clamp(s.bond + 8, 0, 100); s.stats.mental += 3; s.stress = clamp(s.stress - 2, 0, 100); return '딸의 손에서 100만 원을 받았어요. "우리 같이 버티자." 코끝이 찡했습니다.'; } },
@@ -644,7 +644,7 @@
     {
       id: 'hh_housing', weight: 4, kicker: '가족 경제 · 주거', title: '월세가 올랐어요',
       desc: '집주인이 월세를 올리겠다고 합니다. 이사할지, 버틸지 고민됩니다.',
-      when: (s) => s.age >= 13,
+      when: (s) => ageOf(s) >= 13,
       choices: [
         { label: '이사한다', hint: '자산 ↓ · 스트레스 ↑',
           apply(s) { const cost = Math.min(s.money, 100); s.money -= cost; s.stress = clamp(s.stress + 6, 0, 100); s.bond = clamp(s.bond + 2, 0, 100); return '짐을 싸는 데 한 달이 걸렸어요. 새 집은 조금 작지만 햇빛이 좋습니다.'; } },
@@ -727,6 +727,7 @@
       money: hh.money,
       household: hKey,
       bond: 55,
+      dadMode: 'time',
       debt: 0,
       deviance: 0,
       clues: 0,
@@ -784,6 +785,11 @@
     };
   }
 
+  function ageOf(s) {
+    if (typeof s.age === 'number') return s.age;
+    return periodInfo(s).age;
+  }
+
   function snapshot(s) {
     return { stats: Object.assign({}, s.stats), stress: s.stress, money: s.money, bond: s.bond };
   }
@@ -816,6 +822,10 @@
       s.stats[key] = clamp(cur + step, 0, 999);
     }
     return step;
+  }
+
+  function canDo(s, act) {
+    return !!act && (!act.minAge || ageOf(s) >= act.minAge);
   }
 
   function prefOf(s, act) {
@@ -861,6 +871,7 @@
     const R = rng || Math.random;
     const act = ACT_BY_ID[actId];
     if (!act) return null;
+    if (!canDo(s, act)) return null;
     const before = snapshot(s);
     const pref = prefOf(s, act);
 
@@ -1009,6 +1020,12 @@
       s.deviance = clamp((s.deviance || 0) - 3, 0, 100);
     }
     if (s.bond >= 80 && s.stress <= 55) s.stress = clamp(s.stress - 1, 0, 100);
+    if (s.dadMode === 'work') {
+      s.bond = clamp(s.bond - 3, 0, 100);
+      s.stress = clamp(s.stress + 2, 0, 100);
+    } else {
+      s.bond = clamp(s.bond + 2, 0, 100);
+    }
     s.deviance = clamp(s.deviance || 0, 0, 100);
     return s;
   }
@@ -1016,7 +1033,9 @@
   function addAllowance(s) {
     const t = TEMPO[s.tempo] || TEMPO.quarter;
     const h = HOUSEHOLDS[s.household] || HOUSEHOLDS.normal;
-    const amt = (h.allowance && h.allowance[s.tempo]) || t.allowance;
+    const base = (h.allowance && h.allowance[s.tempo]) || t.allowance;
+    const extra = s.dadMode === 'work' ? Math.round(base * 0.9) : 0;
+    const amt = base + extra;
     s.money += amt;
     return amt;
   }
@@ -1275,9 +1294,9 @@
     ACTIVITIES, ACT_BY_ID, CAT_META, EVENTS, EVENT_BY_ID, FESTIVAL,
     ENDINGS, ENDING_BY_ID,
     PERSONALITIES, PERSONALITY_KEYS, buildPrefs, TITLES, personalityTitle, syncTitle, HOUSEHOLDS,
-    clamp, gradeOf, periodInfo, newState, snapshot, diffChips, applyGain,
+    clamp, gradeOf, periodInfo, ageOf, newState, snapshot, diffChips, applyGain,
     resolveSlot, resolveFestival, addAllowance, pickEvent, pickDiscovery, computeEnding,
-    hookyChance, toneOf, applyTone, suggestActivity, endTurn, prefOf,
+    hookyChance, toneOf, applyTone, suggestActivity, endTurn, prefOf, canDo,
   };
 
   root.PMEngine = API;

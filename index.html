@@ -7,7 +7,7 @@
   <meta name="description" content="초3부터 스무 살까지, 21세기 한국에서 딸을 키우는 라이프 시뮬레이션">
   <title>우리 딸, 스무 살 — 21세기 딸 키우기</title>
   <link rel="icon" href="assets/daughter-child.jpg">
-  <link rel="stylesheet" href="styles.css?v=20261125f">
+  <link rel="stylesheet" href="styles.css?v=20261125h">
 </head>
 <body class="is-locked">
   <!-- ============ 잠금 화면 ============ -->
@@ -146,6 +146,18 @@
           <span class="schedule-hint" id="slot-hint">3칸까지 선택</span>
         </div>
         <div class="slots" id="slots"></div>
+
+        <div class="dad-box">
+          <div class="dad-head">
+            <span>👨‍💼 아빠의 이번 <span id="dad-period">분기</span></span>
+            <span class="dad-note" id="dad-note">유대감이 조금씩 올라가요</span>
+          </div>
+          <div class="dad-toggle" id="dad-toggle">
+            <button type="button" data-mode="time">🏠 칼퇴하고 시간 보내기</button>
+            <button type="button" data-mode="work">🌙 야근·특근해서 더 벌기</button>
+          </div>
+        </div>
+
         <button class="btn btn-primary btn-run" id="btn-run">일정 실행</button>
         <p class="run-note" id="run-note">빈 칸은 자유시간이 되어 스트레스가 조금 줄어요.</p>
       </div>
@@ -185,8 +197,8 @@
   <div id="overlay-root"></div>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
 
-  <script src="lock.js?v=20261125f"></script>
-  <script src="engine.js?v=20261125f"></script>
-  <script src="game.js?v=20261125f"></script>
+  <script src="lock.js?v=20261125h"></script>
+  <script src="engine.js?v=20261125h"></script>
+  <script src="game.js?v=20261125h"></script>
 </body>
 </html>
