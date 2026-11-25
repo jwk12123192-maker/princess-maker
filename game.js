@@ -223,11 +223,12 @@
 
     // 시작 능력치 미리보기
     const preview = E.newState(setup.name, setup.blood, setup.tempo);
+    const pp = E.periodInfo(preview);
     const statsHtml = E.STAT_KEYS.map((k) => {
       const m = E.STAT_META[k];
       return '<span>' + m.icon + ' ' + m.label + ' ' + preview.stats[k] + '</span>';
     }).join('');
-    $('#setup-preview').innerHTML = '<span class="preview-title">시작 능력치 · ' + preview.age + '세 ' + E.gradeOf(preview.age) + ' · 보유 자산 ' + preview.money + '만 원</span><div class="preview-stats">' + statsHtml + '</div>';
+    $('#setup-preview').innerHTML = '<span class="preview-title">시작 능력치 · ' + pp.age + '세 ' + pp.grade + ' · 보유 자산 ' + preview.money + '만 원</span><div class="preview-stats">' + statsHtml + '</div>';
   }
 
   function startGame() {
@@ -240,6 +241,7 @@
   }
 
   function enterGame() {
+    if (!Array.isArray(state.recentEvents)) state.recentEvents = [];
     show('game');
     buildStats();
     renderAll();
@@ -320,11 +322,12 @@
     const parts = [];
     if (act.cost) parts.push('<span class="minus">-' + act.cost + '만</span>');
     if (act.money) parts.push('<span class="plus">+' + act.money + '만</span>');
-    const gains = Object.keys(act.gains || {})
-      .filter((k) => act.gains[k] > 0)
-      .slice(0, 3)
-      .map((k) => E.STAT_META[k].label + ' +' + act.gains[k]);
-    if (gains.length) parts.push(gains.join(' '));
+    if (act.stress) parts.push('스트레스 ' + (act.stress > 0 ? '+' : '') + act.stress);
+    Object.keys(act.gains || {}).forEach((k) => {
+      const v = act.gains[k];
+      if (v > 0) parts.push(E.STAT_META[k].label + ' +' + v);
+      else if (v < 0) parts.push('<span class="minus">' + E.STAT_META[k].label + ' ' + v + '</span>');
+    });
     return parts.join(' · ');
   }
 
@@ -466,8 +469,10 @@
       if (act.cost) tags.push('<span class="tag cost">-' + act.cost + '만</span>');
       if (act.money) tags.push('<span class="tag earn">+' + act.money + '만</span>');
       tags.push('<span class="tag stress">스트레스 ' + (act.stress > 0 ? '+' : '') + act.stress + '</span>');
-      Object.keys(act.gains || {}).filter((k) => act.gains[k] > 0).slice(0, 3).forEach((k) => {
-        tags.push('<span class="tag gain">' + E.STAT_META[k].label + ' +' + act.gains[k] + '</span>');
+      Object.keys(act.gains || {}).forEach((k) => {
+        const v = act.gains[k];
+        if (v > 0) tags.push('<span class="tag gain">' + E.STAT_META[k].label + ' +' + v + '</span>');
+        else if (v < 0) tags.push('<span class="tag cost">' + E.STAT_META[k].label + ' ' + v + '</span>');
       });
       if (disabled) tags.push('<span class="tag cost">자산 부족</span>');
       card.innerHTML = '<span class="act-icon">' + act.icon + '</span>' +
@@ -586,7 +591,7 @@
     const summary = document.createElement('div');
     summary.className = 'res';
     summary.innerHTML = '<div class="res-head"><span class="res-ico">💰</span><span class="res-name">' +
-      E.TEMPO[state.tempo].unit + ' 정산</span><span class="res-grade success">+알림</span></div>' +
+      E.TEMPO[state.tempo].unit + ' 정산</span><span class="res-grade success">정산</span></div>' +
       '<p class="res-text">생활비 ' + allowance + '만 원이 들어왔어요. 보유 자산은 ' + fmt(state.money) + '만 원입니다.' +
       (state.stress >= 75 ? ' 스트레스가 많이 쌓였어요. 다음 일정에는 휴식을 넣어 주세요.' : '') + '</p>' +
       '<div class="chips"><span class="chip money">자산 +' + allowance + '</span>' +
@@ -785,7 +790,7 @@
       const m = E.STAT_META[k];
       return '<div class="ending-stat"><span>' + m.icon + ' ' + m.label + '</span><b>' + snapshot.stats[k] + '</b></div>';
     }).join('') +
-      '<div class="ending-stat"><span>💰 자산</span><b>' + fmt(snapshot.money) + '</b></div>' +
+      '<div class="ending-stat"><span>💰 자산(만 원)</span><b>' + fmt(snapshot.money) + '</b></div>' +
       '<div class="ending-stat"><span>😮‍💨 스트레스</span><b>' + snapshot.stress + '</b></div>';
     $('#ending-stats').innerHTML = statsHtml;
 
