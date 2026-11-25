@@ -7,7 +7,7 @@
   <meta name="description" content="초3부터 스무 살까지, 21세기 한국에서 딸을 키우는 라이프 시뮬레이션">
   <title>우리 딸, 스무 살 — 21세기 딸 키우기</title>
   <link rel="icon" href="assets/daughter-child.jpg">
-  <link rel="stylesheet" href="styles.css?v=20261125a">
+  <link rel="stylesheet" href="styles.css?v=20261125b">
 </head>
 <body>
   <div class="bg-layer" aria-hidden="true"></div>
@@ -57,7 +57,12 @@
       <label class="field-label">진행 템포</label>
       <div class="tempo-list" id="tempo-list"></div>
 
+      <label class="field-label">집안 형편 <span class="field-hint-inline">시작 자금·생활비</span></label>
+      <div class="house-grid" id="house-grid"></div>
+      <p class="field-hint" id="house-desc"></p>
+
       <div class="setup-preview" id="setup-preview"></div>
+      <p class="field-hint">딸의 숨은 성향은 무작위로 정해지고, 함께 지내며 서서히 드러납니다. 좋아하는 활동은 효율이 오르고, 싫어하는 활동을 계속 강요하면 마음이 멀어져요.</p>
 
       <button class="btn btn-primary btn-lg" id="btn-start">10년의 육성을 시작합니다</button>
       <p class="field-hint center">10세(초3) → 20세(성인) · 자동 저장됩니다</p>
@@ -73,7 +78,7 @@
           <span class="hud-date" id="hud-date">2026년 봄</span>
           <span class="hud-sub"><b id="hud-grade">초3</b> · <span id="hud-age">10살</span></span>
         </div>
-        <div class="hud-money"><span id="hud-money">300</span><small>만 원</small></div>
+        <div class="hud-money"><span class="hud-debt hidden" id="hud-debt">빚 0</span><span id="hud-money">300</span><small>만 원</small></div>
         <button class="icon-btn" id="btn-sound" aria-label="소리 켜기/끄기">🔊</button>
       </div>
       <div class="life-track" title="성인이 되기까지"><i id="life-fill"></i></div>
@@ -87,12 +92,23 @@
         </div>
         <div class="portrait-info">
           <div class="daughter-name" id="daughter-name">서연</div>
+          <span class="title-chip" id="title-chip">🔍 호기심 많은 꿈나무</span>
           <p class="mood" id="mood-text">마음이 편안해 보여요</p>
+          <div class="trait-row">
+            <span class="house-chip" id="house-chip">🏠 평범한 집안</span>
+            <span class="trait-chip hidden" id="trait-chip">탐구형</span>
+            <span class="clue-chip hidden" id="clue-chip">🕵️ 단서 1</span>
+          </div>
+          <div class="stress-box">
+            <div class="stress-top"><span>💗 유대감</span><b id="bond-val">55</b></div>
+            <div class="bar bond-bar"><i id="bond-fill"></i></div>
+          </div>
           <div class="stress-box">
             <div class="stress-top"><span>스트레스</span><b id="stress-val">8</b></div>
             <div class="bar stress-bar"><i id="stress-fill"></i></div>
             <p class="stress-note" id="stress-note"></p>
           </div>
+          <p class="suggest-note hidden" id="suggest-note"></p>
         </div>
       </aside>
 
@@ -143,7 +159,7 @@
   <div id="overlay-root"></div>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
 
-  <script src="engine.js?v=20261125a"></script>
-  <script src="game.js?v=20261125a"></script>
+  <script src="engine.js?v=20261125b"></script>
+  <script src="game.js?v=20261125b"></script>
 </body>
 </html>
